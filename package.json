@@ -1,0 +1,36 @@
+{
+  "name": "tailwind-color-theme",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Generate theme color, suitable for Tailwind User",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node copy-url && vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.2.25"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.3.3",
+    "autoprefixer": "^10.4.7",
+    "postcss": "^8.4.14",
+    "tailwindcss": "^3.0.24",
+    "vite": "^2.9.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "TailwindColorTheme"
+  },
+  "keywords": [
+    "tailwind",
+    "color",
+    "generator",
+    "tailwind",
+    "theme"
+  ],
+  "author": "Muhammad Sabri",
+  "license": "ISC"
+}
