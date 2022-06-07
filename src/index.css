@@ -1,3 +1,69 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+	button[disabled] {
+		@apply opacity-80 cursor-not-allowed;
+	}
+}
+
+@layer components {
+	.container {
+		@apply mx-auto px-8;
+	}
+
+	.menu {
+		@apply hidden opacity-0 scale-95;
+		transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+	}
+
+	.menu.hide {
+		@apply block;
+	}
+
+	.menu.show {
+		@apply opacity-100 scale-100;
+	}
+
+	.color-panel {
+		@apply bg-white rounded-lg shadow-lg px-8 py-6;
+	}
+
+	.color-panel.disabled {
+		@apply opacity-80;
+	}
+
+	.color-panel.disabled, .color-panel.disabled * {
+		@apply cursor-not-allowed;
+	}
+
+	.btn-hovered-shadow:not([disabled]) {
+		box-shadow: 0 0 0 transparent;
+		transition: box-shadow 0.2s ease-in-out;
+	}
+
+	.btn-hovered-shadow:not([disabled]):hover {
+		box-shadow: 0 0 5px -1px theme('colors.indigo.600');
+	}
+
+	.color-chooser {
+		@apply fixed w-screen h-screen top-0 left-0 bg-black/30 p-8 flex justify-center items-start overflow-auto z-[8888];
+	}
+
+	.color-chooser > .wrapper {
+		@apply bg-white rounded-lg shadow-xl pb-12 md:w-1/2;
+	}
+
+	.color-chooser-header {
+		@apply flex justify-end pb-5;
+	}
+
+	.color-chooser-header > button {
+		@apply text-gray-400/70 p-1;
+	}
+
+	.color-chooser-header > button > * {
+		@apply w-6 h-6;
+	}
+}
