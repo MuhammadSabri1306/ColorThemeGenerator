@@ -21,8 +21,8 @@ class Color {
 	}
 
 	static isColorFormat(c){
-		if(typeof c == "string" && c.length == 7 && c[0] == "hex")
-				return true;
+		if(typeof c == "string" && c.length == 7 && c[0] == "#")
+			return true;
 		if(typeof c == "object" && c.hasOwnProperty("r") && c.hasOwnProperty("g") && c.hasOwnProperty("b"))
 			return true;
 		return false;

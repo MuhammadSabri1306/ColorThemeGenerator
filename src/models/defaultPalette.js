@@ -1,10 +1,14 @@
 export default {
-	base: [
-		{ name: "Black", hex: "#17252a" },
-		{ name: "White", hex: "#feffff" }
-	],
-	half: [
-		{ name: "Dark", hex: "#1c1917" },
-		{ name: "Light", hex: "#f5f5f4" }
-	]
+	base: {
+		black: "#17252a",
+		white: "#feffff"
+	},
+	half: {
+		dark: "#1c1917",
+		light: "#f5f5f4"
+	},
+	primary: {
+		100: "#e0e7ff",
+		900: "#312e81"
+	}
 };

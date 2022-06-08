@@ -4,14 +4,12 @@ import { LockClosedIcon, LockOpenIcon } from "@heroicons/vue/solid";
 import ColorInput from "./ColorInput.vue";
 
 const testColor = new ColorRange({
-	range: 10,
+	range: 100,
 	colors: {
 		100: "#f5f5f4",
 		900: "#1c1917"
 	}
 });
-
-console.log(testColor.generate());
 
 export default {
 	components: { LockClosedIcon, LockOpenIcon, ColorInput },

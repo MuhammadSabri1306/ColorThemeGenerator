@@ -12,13 +12,13 @@ class ColorRange {
 			this.range = params.range;
 
 		if(params.hasOwnProperty("colors")){
-			this.colors = params.colors.map(c => {
-				if(Color.isColor(c))
-					return c;
-				if(Color.isColorFormatted(c))
-					return new Color(c);
-				return false
-			}).filter(c => c !== false);
+			this.colors = {};
+			Object.entries(params.colors).forEach(([key, val]) => {
+				if(Color.isColor(val))
+					this.colors[key] = val;
+				if(Color.isColorFormat(val))
+					this.colors[key] = new Color(val);
+			});
 		}
 	}
 
@@ -27,31 +27,48 @@ class ColorRange {
 			return false;
 
 		let colors = Object.entries(this.colors).map(([key, val]) => {
-			return { key:parseInt(key), val };
+			return {key, val};
 		});
 		let generated = this.colors;
 
-		for(let i = 0; i < result.length - 1; i++){
-			const k = parseInt((colors[i + 1].key - colors[i].key) / this.range);
+		for(let i = 0; i < colors.length - 1; i++){
+			const k = parseInt((parseInt(colors[i + 1].key) - parseInt(colors[i].key)) / this.range);
 			let interval = {}, j = 1;
+			const colorsRGB = {
+				current: colors[i].val.get().rgb(),
+				next: colors[i + 1].val.get().rgb()
+			};
 
-			interval.r = parseInt((colors[i + 1].val.get().rgb().r - colors[i].val.get().rgb().r) / this.range);
-			interval.g = parseInt((colors[i + 1].val.get().rgb().g - colors[i].val.get().rgb().g) / this.range);
-			interval.b = parseInt((colors[i + 1].val.get().rgb().b - colors[i].val.get().rgb().b) / this.range);
+			interval.r = parseInt((colorsRGB.next.r - colorsRGB.current.r) / k);
+			interval.g = parseInt((colorsRGB.next.g - colorsRGB.current.g) / k);
+			interval.b = parseInt((colorsRGB.next.b - colorsRGB.current.b) / k);
 
-			for(key = colors[i].key + k; key < colors[i + 1].key; key+k){
-				const newColor = {
+			let addedKeys = parseInt(colors[i].key) + this.range;
+			while(addedKeys < parseInt(colors[i + 1].key)){
+				const addedColor = {
 					r: colors[i].val.get().rgb().r + interval.r * j,
 					g: colors[i].val.get().rgb().g + interval.g * j,
 					b: colors[i].val.get().rgb().b + interval.b * j
 				};
 
-				generated[key] = new Color(newColor);
+				generated[addedKeys] = new Color(addedColor);
+				addedKeys += this.range;
 				j++;
 			}
 		}
 
 		return generated;
+	}
+
+	convertToHex(){
+		const colors = this.generate();
+		const converted = {};
+
+		Object.entries(colors).forEach(([key, color]) => {
+			converted[key] = color.get().hex();
+		});
+
+		return converted;
 	}
 }
 
