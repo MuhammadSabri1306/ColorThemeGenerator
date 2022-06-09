@@ -1,54 +1,66 @@
 <script>
-import ColorRange from "./../services/ColorRange";
-import { LockClosedIcon, LockOpenIcon } from "@heroicons/vue/solid";
+import { LockClosedIcon, LockOpenIcon, MinusCircleIcon } from "@heroicons/vue/solid";
 import ColorInput from "./ColorInput.vue";
-
-const testColor = new ColorRange({
-	range: 100,
-	colors: {
-		100: "#f5f5f4",
-		900: "#1c1917"
-	}
-});
+import ColorCircle from "./ColorCircle.vue";
+import ColorAdd from "./ColorAdd.vue";
 
 export default {
-	components: { LockClosedIcon, LockOpenIcon, ColorInput },
+	components: {
+		LockClosedIcon,
+		LockOpenIcon,
+		MinusCircleIcon,
+		ColorInput,
+		ColorCircle,
+		ColorAdd
+	},
 	props: {
 		title: String,
 		lock: Boolean,
-		defaultColors: Array,
-		isEditable: Boolean,
-		useNextButton: Boolean
+		name: String,
+		colors: Object,
+		customizable: Boolean
 	},
-	emits: ['saveColors'],
+	emits: ["setColor", "removeColor"],
 	data(){
 		return {
-			colors: {},
 			isLocked: false
 		};
+	},
+	computed: {
+		colorCustom(){
+			return this.colors.custom;
+		},
+		colorRange(){
+			return this.colors.generated;
+		},
+		availableKey(){
+			return Object.keys(this.colors.custom);
+		},
+		canUseAdd(){
+			return this.customizable && Object.keys(this.colorCustom).length < 9;
+		},
+		canUseRemove(){
+			return this.customizable && Object.keys(this.colorCustom).length > 1 ;
+		}
 	},
 	created(){
 		this.initData();
 	},
 	methods: {
 		initData(){
-			this.colors = {};
-			this.defaultColors.forEach(dColor => {
-				this.colors[dColor.name] = dColor.hex;
-			});
-
 			this.isLocked = false;
 			this.isLocked = this.lock;
 		},
 		changeIsLocked(){
 			this.isLocked = !this.isLocked;
 		},
-		changeColor(colorName, colorValue){
-			this.colors[colorName] = colorValue;
+		setColor(key, val){
+			const name = this.name;
+			this.$emit("setColor", { name, key, val });
 		},
-		saveColors(){
-			this.$emit('saveColors', this.colors);
-			this.isLocked = true;
+		removeColor(key){
+			const name = this.name;
+			this.$emit("removeColor", { name, key });
 		}
 	}
 };
@@ -59,19 +71,25 @@ export default {
 	}
 </style>
 <template>
-	<div class="color-panel" :class="{ 'disabled': !isEditable }">
-		<div class="flex justify-between items-start">
+	<div class="color-panel">
+		<div class="flex justify-between items-start mb-12">
 			<h4 class="text-lg font-bold leading-6 text-gray-700 sm:text-xl sm:truncate">{{ title }}</h4>
-			<button type="button" @click="changeIsLocked()" :disabled="!isEditable">
-				<LockClosedIcon v-if="isLocked" class="closed-icon text-gray-500" :class="{ 'hover:text-gray-600': isEditable }" />
-				<LockOpenIcon v-if="!isLocked" class="open-icon text-gray-400" :class="{ 'hover:text-gray-600': isEditable }" />
+			<button type="button" @click="changeIsLocked()">
+				<LockClosedIcon v-if="isLocked" class="closed-icon text-gray-500 hover:text-gray-600" />
+				<LockOpenIcon v-if="!isLocked" class="open-icon text-gray-400 hover:text-gray-600" />
 			</button>
 		</div>
-		<div class="flex flex-wrap justify-start items-start py-4">
-			<ColorInput v-for="(colorVal, colorName) in colors" :colorName="colorName" :color="colorVal" :isDisabled="!isEditable || isLocked" @changeColor="changeColor" />
+		<div class="flex flex-wrap justify-start items-start mb-4">
+			<div v-for="(colorVal, colorKey) in colorCustom" class="relative">
+				<ColorInput :colorName="colorKey" :color="colorVal" :isDisabled="isLocked" @changeColor="setColor" />
+				<button v-if="canUseRemove" class="absolute top-0 right-0 text-gray-400 transition-colors duration-200 ease-in-out hover:text-gray-600" @click="removeColor(colorKey)">
+					<MinusCircleIcon class="w-6 h-6" />
+				</button>
+			</div>
+			<ColorAdd v-if="canUseAdd" :disabledKeys="availableKey" @add="setColor" />
 		</div>
-		<div v-if="useNextButton" class="flex justify-end mt-8">
-			<button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white" :class="{ 'hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500': isEditable }" @click="saveColors()">Next</button>
+		<div class="flex flex-wrap justify-start items-start">
+			<ColorCircle v-for="(colorVal, colorKey) in colorRange" :color="colorVal" :label="colorKey" :circleClassList="['w-12', 'h-12']" :labelClassList="['text-gray-600', 'font-sm', 'font-semibold']" class="m-2" />
 		</div>
 	</div>
 </template>

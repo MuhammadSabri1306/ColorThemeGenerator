@@ -1,7 +1,7 @@
-import ColorRange from "./services/ColorRange";
+import ColorRange from "./ColorRange";
 
 const generateHalfColors = (lightHex, darkHex) => {
-	const generated = {};
+	const generated = { light: {}, dark: {} };
 
 	const halfColors = new ColorRange({
 		range: 100,
@@ -23,7 +23,16 @@ const generateHalfColors = (lightHex, darkHex) => {
 		}
 	});
 
-	return generated;
+	return {
+		light: {
+			custom: { 100: lightHex },
+			generated: generated.light
+		},
+		dark: {
+			custom: { 900: darkHex },
+			generated: generated.dark
+		}
+	};
 };
 
 export default generateHalfColors; 

@@ -1,4 +1,4 @@
-import ColorRange from "./services/ColorRange";
+import ColorRange from "./ColorRange";
 
 const generateColors = hexKeys => {
 	const generated = {};

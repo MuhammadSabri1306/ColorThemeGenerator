@@ -22,6 +22,9 @@ export default {
 	}
 };
 </script>
+<style scoped>
+	button[disabled] { opacity: 1!important; }
+</style>
 <template>
 	<div class="flex flex-col items-center m-2">
 		<button @click="showColorChooser = true" type="button" class="rounded-full w-16 h-16 border border-gray-300 btn-hovered-shadow" :name="colorName" :style="{ backgroundColor: color }" :disabled="isDisabled"></button>

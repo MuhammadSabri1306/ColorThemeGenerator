@@ -55,8 +55,8 @@ export default {
 };
 </script>
 <template>
-	<div class="color-chooser"><div class="wrapper">
-		<div class="color-chooser-header">
+	<div class="modal"><div class="modal-wrapper">
+		<div class="modal-header">
 			<button type="button" class="group" @click="$emit('cancel')">
 				<XCircleIcon class="group-hover:scale-90 transition-all duration-200 ease-in-out" />
 			</button>

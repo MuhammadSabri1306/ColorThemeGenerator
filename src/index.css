@@ -47,23 +47,27 @@
 		box-shadow: 0 0 5px -1px theme('colors.indigo.600');
 	}
 
-	.color-chooser {
+	.modal {
 		@apply fixed w-screen h-screen top-0 left-0 bg-black/30 p-8 flex justify-center items-start overflow-auto z-[8888];
 	}
 
-	.color-chooser > .wrapper {
-		@apply bg-white rounded-lg shadow-xl pb-12 md:w-1/2;
+	.modal-wrapper {
+		@apply bg-white rounded-lg shadow-xl pb-12;
 	}
 
-	.color-chooser-header {
+	.modal:not(.modal-w-auto) > .modal-wrapper {
+		@apply md:w-1/2;
+	}
+
+	.modal-header {
 		@apply flex justify-end pb-5;
 	}
 
-	.color-chooser-header > button {
+	.modal-header > button {
 		@apply text-gray-400/70 p-1;
 	}
 
-	.color-chooser-header > button > * {
+	.modal-header > button > * {
 		@apply w-6 h-6;
 	}
 }
