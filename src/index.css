@@ -70,4 +70,8 @@
 	.modal-header > button > * {
 		@apply w-6 h-6;
 	}
+
+	.custom-form-select button {
+		@apply opacity-100;
+	}
 }

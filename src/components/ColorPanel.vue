@@ -79,9 +79,12 @@ export default {
 				<LockOpenIcon v-if="!isLocked" class="open-icon text-gray-400 hover:text-gray-600" />
 			</button>
 		</div>
-		<div class="flex flex-wrap justify-start items-start mb-4">
+		<div v-if="isLocked" class="flex flex-wrap justify-start items-start mb-4">
+			<ColorCircle v-for="(colorVal, colorKey) in colorCustom" :color="colorVal" :label="colorKey" :circleClassList="['w-16', 'h-16']" :labelClassList="['text-gray-600', 'text-sm', 'font-semibold']" class="m-2" />
+		</div>
+		<div v-else class="flex flex-wrap justify-start items-start mb-4">
 			<div v-for="(colorVal, colorKey) in colorCustom" class="relative">
-				<ColorInput :colorName="colorKey" :color="colorVal" :isDisabled="isLocked" @changeColor="setColor" />
+				<ColorInput :colorName="colorKey" :color="colorVal" @changeColor="setColor" />
 				<button v-if="canUseRemove" class="absolute top-0 right-0 text-gray-400 transition-colors duration-200 ease-in-out hover:text-gray-600" @click="removeColor(colorKey)">
 					<MinusCircleIcon class="w-6 h-6" />
 				</button>
@@ -89,7 +92,7 @@ export default {
 			<ColorAdd v-if="canUseAdd" :disabledKeys="availableKey" @add="setColor" />
 		</div>
 		<div class="flex flex-wrap justify-start items-start">
-			<ColorCircle v-for="(colorVal, colorKey) in colorRange" :color="colorVal" :label="colorKey" :circleClassList="['w-12', 'h-12']" :labelClassList="['text-gray-600', 'font-sm', 'font-semibold']" class="m-2" />
+			<ColorCircle v-for="(colorVal, colorKey) in colorRange" :color="colorVal" :label="colorKey" :circleClassList="['w-12', 'h-12']" :labelClassList="['text-gray-600', 'text-sm', 'font-semibold']" class="m-2" />
 		</div>
 	</div>
 </template>

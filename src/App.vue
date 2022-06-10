@@ -82,7 +82,7 @@ const removeColors = ({ name, key }) => {
 		<BrandHeader @newTheme="newTheme" />
 		<main class="container">
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-10 p-8">
-				<BaseColorPanel ref="baseColorPanel" title="Base Color" :defaultColors="data.colors.base" :hasInit="data.hasInit" @submit="saveBaseColors" />
+				<BaseColorPanel ref="baseColorPanel" title="Base Color" :defaultColors="data.colors.base" :hasInit="data.hasInit" @submit="saveBaseColors" :class="{ 'col-span-full': data.hasInit }" />
 			</div>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-10 p-8">
 				<ColorPanel title="Light" name="light" :colors="data.colors.light" @setColor="changeHalfColors" />
