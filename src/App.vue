@@ -1,22 +1,35 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import PageHome from "./components/PageHome.vue";
 import PageGenerate from "./components/PageGenerate.vue";
 import simpleRouter from "./services/simpleRouter";
 
-const hasInit = ref(false);
+if(simpleRouter.getPageId() === "e404")
+	simpleRouter.redirectTo("/");
 
-const newThemeListener = () => {
-	simpleRouter.goTo("generate", () => {
-		console.log("change to generate");
+const showPage = ref(simpleRouter.getPageId());
+
+const isHomePage = computed(() => showPage.value == "home");
+const isGeneratePage = computed(() => showPage.value == "generate");
+const isE404Page = computed(() => showPage.value == "e404");
+
+const redirectToGenerate = () => {
+	simpleRouter.redirectTo("/generate", () => {
+		showPage.value = "generate";
+	});
+};
+
+const redirectToHome = () => {
+	simpleRouter.redirectTo("/", () => {
+		showPage.value = "home";
 	});
 };
 </script>
 <template>
 <div class="bg-gray-100 min-h-screen">
-	<PageHome v-if="!hasInit" @newTheme="newThemeListener" />
-	<PageGenerate v-else @cancel="hasInit = false" />
-	<footer class="bg-gray-900">
+	<PageHome v-if="isHomePage" @newTheme="redirectToGenerate" />
+	<PageGenerate v-if="isGeneratePage" @cancel="redirectToHome" />
+	<footer v-if="!isE404Page" class="bg-gray-900">
 		<div class="container">
 			<div class="flex flex-col md:flex-row justify-center md:justify-between items-center">
 				<p class="text-gray-300 text-center text-sm pt-16 md:pt-8 pb-8 px-12 md:px-0">&copy; Color Theme Generator by <a href="#" class="font-semibold text-gray-200 transition-colors duration-200 ease-in-out hover:text-indigo-500">Muhammad Sabri</a>. 2022</p>

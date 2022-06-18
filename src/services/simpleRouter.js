@@ -1,14 +1,16 @@
-const basePage = "home";
-const e404Page = false; // String if you have custom E404 page 
-const otherPage = [];  // Array of String
-
-// it will be execute if e404Path undefined
-const e404 = () => {
-	return;
+const routes = {
+	"/": {
+		title: document.title,
+		pageId: "home"
+	},
+	"/generate": {
+		title: "Generate - " + document.title,
+		pageId: "generate"
+	}
 };
 
 const createUrl = path => {
-	const newUrl new URL(window.location.href);
+	const newUrl = new URL(window.location.href);
 	const useBackslash = newUrl.pathname[0] == "/";
 
 	newUrl.pathname = useBackslash && path[0] == "/" ? path
@@ -19,9 +21,27 @@ const createUrl = path => {
 	return newUrl.href;
 };
 
-const goTo = (path, callback) => {
-	window.history.pushState("", "Generate - Vite App", path);
-	callback();
+const getPageId = () => {
+	let currentPath = window.location.pathname;
+	
+	if(currentPath[0] != "/")
+		currentPath = "/" + currentPath;
+
+	if(routes[currentPath])
+		return routes[currentPath].pageId;
+	return "e404";
 };
 
-export default { goTo };
+const redirectTo = (path, callback = null) => {
+	if(!routes[path]){
+		console.error("Undefined path of routes: " + path);
+		return;
+	}
+
+	document.title = routes[path].title;
+	window.history.pushState("", routes[path].title, createUrl(path));
+
+	callback && callback();
+};
+
+export default { routes, getPageId, redirectTo };
