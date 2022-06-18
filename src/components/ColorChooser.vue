@@ -1,11 +1,11 @@
 <script>
 import twPalette from "./../models/tailwindPalette";
 import searchAlgorithm from "./../services/searchAlgorithm";
+import FixedModal from "./FixedModal.vue";
 import ColorCircle from "./ColorCircle.vue";
-import { XCircleIcon } from "@heroicons/vue/solid";
 
 export default {
-	components: { ColorCircle, XCircleIcon },
+	components: { FixedModal, ColorCircle },
 	emits: ["submit", "cancel"],
 	data(){
 		return {
@@ -55,12 +55,7 @@ export default {
 };
 </script>
 <template>
-	<div class="modal"><div class="modal-wrapper">
-		<div class="modal-header">
-			<button type="button" class="group" @click="$emit('cancel')">
-				<XCircleIcon class="group-hover:scale-90 transition-all duration-200 ease-in-out" />
-			</button>
-		</div>
+	<FixedModal @close="$emit('cancel')">
 		<div class="grid grid-cols-2 mb-6 px-8">
 			<button @click="switchTab('twPalette')" type="button" class="px-4 py-2 border border-indigo-600 rounded-l-md shadow-sm text-sm font-medium hover:bg-indigo-700 hover:border-indigo-700 hover:text-white focus:outline-none" :class="{ 'bg-indigo-600 text-white': activeTabs.twPalette, 'bg-gray-100 text-indigo-600': activeTabs.customColor }">Tailwind Palette</button>
 			<button @click="switchTab('customColor')" type="button" class="px-4 py-2 border border-indigo-600 rounded-r-md shadow-sm text-sm font-medium hover:bg-indigo-700 hover:border-indigo-700 hover:text-white focus:outline-none" :class="{ 'bg-indigo-600 text-white': activeTabs.customColor, 'bg-gray-100 text-indigo-600': activeTabs.twPalette }">Custom Color</button>
@@ -95,5 +90,5 @@ export default {
 				</div>
 			</div>
 		</div>
-	</div></div>
+	</FixedModal>
 </template>

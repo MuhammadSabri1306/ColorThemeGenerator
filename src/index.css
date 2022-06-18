@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+	html {
+		@apply scroll-smooth;
+	}
 	button[disabled] {
 		@apply opacity-80 cursor-not-allowed;
 	}
@@ -11,6 +14,18 @@
 @layer components {
 	.container {
 		@apply mx-auto px-8;
+	}
+
+	.btn-navigation {
+		@apply md:inline-flex md:items-center whitespace-nowrap px-4 pt-3 pb-2 md:pb-3;
+	}
+
+	.btn-navigation.active {
+		@apply text-indigo-600 border-b-4 border-indigo-600 pb-[calc(0.5rem_-_4px)] md:pb-[calc(0.75rem_-_4px)];
+	}
+
+	.btn-navigation > .icon {
+		@apply w-6 h-6 mx-auto mb-1 md:mb-0 md:ml-2;
 	}
 
 	.menu {
@@ -27,7 +42,7 @@
 	}
 
 	.color-panel {
-		@apply bg-white rounded-lg shadow-lg px-8 py-6;
+		@apply relative bg-white rounded-lg shadow-lg px-8 lg:px-12 py-6 lg:py-10;
 	}
 
 	.color-panel.disabled {
@@ -73,5 +88,36 @@
 
 	.custom-form-select button {
 		@apply opacity-100;
+	}
+
+	.code-editor {
+		@apply relative bg-gray-900 border border-black rounded-lg;
+	}
+
+	.code-editor-content {
+		@apply whitespace-nowrap w-fit text-gray-300 text-[0.9em];
+	}
+
+	.code-editor-content .red { @apply text-red-400; }
+	.code-editor-content .blue { @apply text-blue-400/80; }
+	.code-editor-content .yellow { @apply text-yellow-500/90; }
+	.code-editor-content .green { @apply text-green-400/80; }
+	.code-editor-content .purple { @apply text-violet-400; }
+	.code-editor-content .comment { @apply text-gray-500; }
+
+	.svg-inline--fa {
+		@apply inline-block w-[1em] h-[1em] overflow-visible;
+		font-size: inherit;
+		vertical-align: -.125em;
+	}
+
+	footer .social-link {
+		@apply text-xl md:text-2xl text-gray-100 mx-4 md:mx-2 transition-colors duration-200 ease-in-out hover:text-indigo-600
+	}
+}
+
+@layer utilities {
+	.shadow-custom-1 {
+		@apply shadow-[inset_5px_5px_10px_rgba(255,255,255,0.2),3px_3px_5px_rgba(0,0,0,0.4)];
 	}
 }

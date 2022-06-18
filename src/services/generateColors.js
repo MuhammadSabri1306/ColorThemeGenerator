@@ -1,6 +1,9 @@
 import ColorRange from "./ColorRange";
 
-const generateColors = hexKeys => {
+const generateColors = (hexKeys = null) => {
+	if(hexKeys == null)
+		return { custom: {}, generated: {} };
+	
 	const generated = {};
 
 	const colors = new ColorRange({

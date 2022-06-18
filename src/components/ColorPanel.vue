@@ -1,5 +1,6 @@
 <script>
 import { LockClosedIcon, LockOpenIcon, MinusCircleIcon } from "@heroicons/vue/solid";
+import { TrashIcon } from "@heroicons/vue/outline";
 import ColorInput from "./ColorInput.vue";
 import ColorCircle from "./ColorCircle.vue";
 import ColorAdd from "./ColorAdd.vue";
@@ -9,6 +10,7 @@ export default {
 		LockClosedIcon,
 		LockOpenIcon,
 		MinusCircleIcon,
+		TrashIcon,
 		ColorInput,
 		ColorCircle,
 		ColorAdd
@@ -18,9 +20,11 @@ export default {
 		lock: Boolean,
 		name: String,
 		colors: Object,
-		customizable: Boolean
+		customizable: Boolean,
+		destroyable: Boolean,
+		editTitle: Boolean
 	},
-	emits: ["setColor", "removeColor"],
+	emits: ["setColor", "removeColor", 'destroy'],
 	data(){
 		return {
 			isLocked: false
@@ -41,6 +45,10 @@ export default {
 		},
 		canUseRemove(){
 			return this.customizable && Object.keys(this.colorCustom).length > 1 ;
+		},
+		titleEditableClassList(){
+			if(!this.editTitle) return [];
+			return ["border-b", "border-transparent", "transition-colors", "duration-200", "ease-in-out", "hover:border-gray-400", "focus:border-gray-400", "focus:outline-none"];
 		}
 	},
 	created(){
@@ -61,22 +69,26 @@ export default {
 		removeColor(key){
 			const name = this.name;
 			this.$emit("removeColor", { name, key });
+		},
+		changeTitle(event){
+			const title = event.target.innerText;
+			console.log(title.replace(/[^a-z1-9]/gi, "").toLowerCase());
 		}
 	}
 };
 </script>
-<style scoped>
-	.closed-icon, .open-icon {
-		@apply w-4 h-4 transition-colors duration-200 ease-in-out;
-	}
-</style>
 <template>
 	<div class="color-panel">
 		<div class="flex justify-between items-start mb-12">
-			<h4 class="text-lg font-bold leading-6 text-gray-700 sm:text-xl sm:truncate">{{ title }}</h4>
-			<button type="button" @click="changeIsLocked()">
-				<LockClosedIcon v-if="isLocked" class="closed-icon text-gray-500 hover:text-gray-600" />
-				<LockOpenIcon v-if="!isLocked" class="open-icon text-gray-400 hover:text-gray-600" />
+			<div class="flex items-center">
+				<h4 class="text-xl lg:text-lg truncate font-bold leading-6 text-gray-700" :class="titleEditableClassList" :contenteditable="editTitle" @input="changeTitle">{{ title }}</h4>
+				<button type="button" class="ml-3 transition-colors duration-200 ease-in-out hover:text-gray-600" :class="{ 'text-gray-500': isLocked, 'text-gray-400': !isLocked }" @click="changeIsLocked()">
+					<LockClosedIcon v-if="isLocked" class="w-4 h-4" />
+					<LockOpenIcon v-else class="w-4 h-4" />
+				</button>
+			</div>
+			<button v-if="!isLocked && destroyable" type="button" class="text-gray-400 transition-colors duration-200 ease-in-out hover:text-gray-600 -mr-6 -mt-4" @click="$emit('destroy', name)" >
+				<TrashIcon class="w-5 h-5" />
 			</button>
 		</div>
 		<div v-if="isLocked" class="flex flex-wrap justify-start items-start mb-4">

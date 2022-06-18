@@ -61,7 +61,7 @@ export default {
 			</div>
 		</button>
 		<div v-if="showOptions" class="relative">
-			<div ref="optionWrapper" class="absolute top-2 left-0 min-w-[12rem] border rounded-md border-gray-300 shadow-sm flex flex-col items-stretch">
+			<div class="absolute top-2 left-0 min-w-[12rem] border rounded-md border-gray-300 shadow-sm flex flex-col items-stretch z-[8899]">
 				<button type="button" class="custom-option text-sm font-semibold bg-gray-200 text-gray-600 text-left py-1 px-4" disabled>{{ title }}</button>
 				<button v-for="item in content" type="button" @click="changeValue(item.value)" class="custom-option text-sm font-semibold text-left py-1 px-4" :disabled="item.disabled || item.selected" :class="listItemClass(item.selected, item.disabled)">{{ item.text }}</button>
 			</div>
