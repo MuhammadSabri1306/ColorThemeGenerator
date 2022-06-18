@@ -1,5 +1,5 @@
 {
-  "name": "tailwind-color-theme",
+  "name": "color-theme-generator",
   "private": true,
   "version": "1.0.0",
   "description": "Generate theme color, suitable for Tailwind User",
@@ -23,14 +23,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "TailwindColorTheme"
+    "url": "https://github.com/MuhammadSabri1306/ColorThemeGenerator.git"
   },
   "keywords": [
     "tailwind",
-    "color",
-    "generator",
-    "tailwind",
-    "theme"
+    "color generator",
+    "tailwind theme",
+    "palette color"
   ],
   "author": "Muhammad Sabri",
   "license": "ISC"
