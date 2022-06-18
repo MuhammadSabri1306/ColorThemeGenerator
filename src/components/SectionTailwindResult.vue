@@ -42,7 +42,7 @@ export default {
 	<section>
 		<CodeEditor ref="codeEditor" @copy=copyCode>
 <pre ref="codeContent"><span class="comment">// tailwind.config.js</span>
-<span class="red">module</span>.<span class="blue">exports</span> = {
+<span class="red">module</span>.exports = {
   content: [<span class="green">'./src/**/*.{html,js}'</span>],
   theme: {
     colors: {

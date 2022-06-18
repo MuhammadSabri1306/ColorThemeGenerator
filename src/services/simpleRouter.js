@@ -18,6 +18,7 @@ const createUrl = path => {
 		: !useBackslash && path[0] == "/" ? path.slice(1)
 		: path;
 
+	newUrl.hash = "";
 	return newUrl.href;
 };
 
@@ -38,8 +39,7 @@ const redirectTo = (path, callback = null) => {
 		return;
 	}
 
-	document.title = routes[path].title;
-	window.history.pushState("", routes[path].title, createUrl(path));
+	window.history.replaceState("", routes[path].title, createUrl(path));
 
 	callback && callback();
 };

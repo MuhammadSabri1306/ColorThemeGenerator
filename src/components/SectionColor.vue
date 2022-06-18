@@ -25,7 +25,7 @@ export default {
 	},
 	methods: {
 		setup(){
-			const dPalette = { ...defaultPalette };
+			const dPalette = JSON.parse(JSON.stringify(defaultPalette));
 			const halfColors = generateHalfColors(dPalette.half.light, dPalette.half.dark);
 
 			const base = { custom: dPalette.base },
@@ -102,13 +102,13 @@ export default {
 <template>
 	<section>
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-14 lg:gap-16 px-0 md:px-8 py-8">
-			<div class="flex flex-col justify-end items-stretch">
-				<ColorPanel title="Base Color" name="base" :colors="colors.base" @setColor="changeBaseColor" />
-			</div>
-			<ColorPanel title="Light" name="light" :colors="colors.light" @setColor="changeHalfColor" />
-			<ColorPanel title="Dark" name="dark" :colors="colors.dark" @setColor="changeHalfColor" />
 			<ColorPanel title="Primary" name="primary" :colors="colors.primary" :customizable="true" @setColor="changePrimaryColor" @removeColor="removePrimaryColor" />
 			<ColorPanel v-for="(v, k) in colors.others" :title="k[0].toUpperCase() + k.slice(1)" :name="k" :colors="v" :customizable="true" :destroyable="true" :editTitle="true" @setColor="changeOthersColor" @removeColor="removeOthersColor" @destroy="destroyOthersColor" />
+			<ColorPanel title="Dark" name="dark" :colors="colors.dark" @setColor="changeHalfColor" />
+			<ColorPanel title="Light" name="light" :colors="colors.light" @setColor="changeHalfColor" />
+			<div>
+				<ColorPanel title="Base Color" name="base" :colors="colors.base" @setColor="changeBaseColor" />
+			</div>
 		</div>
 		<div class="fixed bottom-8 md:bottom-12 lg:bottom-16 right-8 md:right-16 lg:right-32 z-[7777]">
 			<button type="button" class="border border-transparent rounded-full shadow-custom-1 text-white p-3 lg:p-4 bg-indigo-600 hover:bg-indigo-700 focus:outline-none" @click="openNewColorModal">
