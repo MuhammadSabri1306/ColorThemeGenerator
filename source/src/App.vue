@@ -18,13 +18,13 @@ const isGeneratePage = computed(() => showPage.value == "generate");
 const isE404Page = computed(() => showPage.value == "e404");
 
 const redirectToGenerate = () => {
-	simpleRouter.redirectTo("/generate", () => {
+	simpleRouter.redirectTo("/ColorThemeGenerator/generate", () => {
 		showPage.value = "generate";
 	});
 };
 
 const redirectToHome = () => {
-	simpleRouter.redirectTo("/", () => {
+	simpleRouter.redirectTo("/ColorThemeGenerator/", () => {
 		showPage.value = "home";
 	});
 };
