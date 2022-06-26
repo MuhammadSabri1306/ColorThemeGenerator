@@ -1,10 +1,10 @@
 <script>
 import { PlusIcon } from "@heroicons/vue/solid";
 import KeySelector from "./KeySelector.vue";
-import ColorChooser from "./ColorChooser.vue";
+import FormChooseColor from "./FormChooseColor.vue";
 
 export default {
-	components: { KeySelector, ColorChooser, PlusIcon },
+	components: { KeySelector, FormChooseColor, PlusIcon },
 	props: {
 		disabledKeys: Array
 	},
@@ -53,5 +53,5 @@ export default {
 		</button>
 	</div>
 	<KeySelector v-if="showKeySelector" :keyOption="keyOption" @submit="chooseColor" @cancel="cancel" />
-	<ColorChooser v-if="showColorChooser" @submit="addColor" @cancel="cancel" />
+	<FormChooseColor v-if="showColorChooser" @submit="addColor" @cancel="cancel" />
 </template>

@@ -1,8 +1,8 @@
 <script>
-import ColorChooser from "./ColorChooser.vue";
+import FormChooseColor from "./FormChooseColor.vue";
 
 export default {
-	components: { ColorChooser },
+	components: { FormChooseColor },
 	props: {
 		colorName: String,
 		color: String,
@@ -11,13 +11,13 @@ export default {
 	emits: ['changeColor'],
 	data(){
 		return {
-			showColorChooser: false
+			showFormChooseColor: false
 		};
 	},
 	methods: {
 		changeColor(colorValue){
 			this.$emit('changeColor', this.colorName, colorValue);
-			this.showColorChooser = false;
+			this.showFormChooseColor = false;
 		}
 	}
 };
@@ -27,8 +27,8 @@ export default {
 </style>
 <template>
 	<div class="flex flex-col items-center m-2">
-		<button @click="showColorChooser = true" type="button" class="rounded-full w-16 h-16 border border-gray-300 btn-hovered-shadow" :name="colorName" :style="{ backgroundColor: color }" :disabled="isDisabled"></button>
+		<button @click="showFormChooseColor = true" type="button" class="rounded-full w-16 h-16 border border-gray-300 btn-hovered-shadow" :name="colorName" :style="{ backgroundColor: color }" :disabled="isDisabled"></button>
 		<label v-if="colorName" for="colorName" class="text-gray-600 font-semibold text-sm mt-2">{{ colorName }}</label>
 	</div>
-	<ColorChooser v-if="showColorChooser" @submit="changeColor" @cancel="showColorChooser = false" />
+	<FormChooseColor v-if="showFormChooseColor" @submit="changeColor" @cancel="showFormChooseColor = false" />
 </template>

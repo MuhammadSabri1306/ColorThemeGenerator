@@ -2,8 +2,6 @@
 import { ref, reactive, onMounted, onUnmounted } from "vue";
 import { ColorSwatchIcon, ChevronDownIcon } from "@heroicons/vue/solid";
 
-defineEmits(["newTheme"]);
-
 const heroWrapper = ref(null);
 const hero = ref(null);
 let heroDefaultHeight = 0;
@@ -59,7 +57,7 @@ onUnmounted(() => window.removeEventListener("scroll", heroOnScroll));
 
 <template>
 <main>
-	<header class="pt-6 md:pt-10">
+	<header id="home" class="pt-6 md:pt-10">
 		<div class="container">
 			<div class="lg:flex lg:items-center lg:justify-between">
 				<div class="flex-1 min-w-0">
@@ -97,7 +95,7 @@ onUnmounted(() => window.removeEventListener("scroll", heroOnScroll));
 				<h4 class="text-4xl text-center font-black text-gray-800 mt-6 mb-6">What i am?</h4>
 				<div class="flex flex-col justify-center items-center">
 					<p class="text-lg text-gray-700 text-center md:leading-8 md:w-2/3 mb-4">Hi! I will support you to build great <strong>Palette Theme</strong>. Create your own palette with more shades you can customize and apply to your apps. You can get the result as <strong>CSS Color Custom Properties</strong> (--*) or <strong><i>tailwind.config.js</i></strong> if you are familiar with  Tailwind CSS.</p>
-					<button @click="$emit('newTheme')" class="px-8 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">New Theme</button>
+					<a href="#generate" class="px-8 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">New Theme</a>
 				</div>
 			</div>
 		</section>

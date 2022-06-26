@@ -1,9 +1,9 @@
 const routes = {
-	"/ColorThemeGenerator/": {
+	"/": {
 		title: document.title,
 		pageId: "home"
 	},
-	"/ColorThemeGenerator/generate": {
+	"/generate": {
 		title: "Generate - " + document.title,
 		pageId: "generate"
 	}

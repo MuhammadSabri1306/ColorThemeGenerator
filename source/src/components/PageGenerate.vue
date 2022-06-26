@@ -6,8 +6,6 @@ import SectionTailwindResult from "./SectionTailwindResult.vue";
 import SectionCssResult from "./SectionCssResult.vue";
 import { ColorSwatchIcon } from "@heroicons/vue/solid";
 
-defineEmits(["cancel"]);
-
 const activeSection = ref(1),
 	sectionColor = ref(null),
 	sectionTailwindResult = ref(null),
@@ -69,10 +67,10 @@ const navigationListener = navIndex => {
 <main>
 	<header class="bg-white border-b md:border-b-0 border-gray-300">
 		<div class="container flex pt-6 md:pt-10 pb-3 md:pb-10">
-			<button class="flex justify-center items-end mx-auto" @click="$emit('cancel')">
+			<a href="#home" class="flex justify-center items-end mx-auto">
 				<ColorSwatchIcon class="h-10 w-10 text-indigo-500 mr-1" />
 				<h2 class="text-2xl font-bold leading-7 text-gray-800 sm:text-3xl sm:truncate">Color Theme Generator</h2>
-			</button>
+			</a>
 		</div>
 	</header>
 	<Navigation v-if="activeSection > 0" :activeNavIndex="activeSection" @navigate="navigationListener" />

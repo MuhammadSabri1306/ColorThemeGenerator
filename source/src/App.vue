@@ -2,53 +2,51 @@
 import { ref, computed } from "vue";
 import PageHome from "./components/PageHome.vue";
 import PageGenerate from "./components/PageGenerate.vue";
-import SolidEnvelopeIcon from "./components/IconSocial/SolidEnvelopeIcon.vue";
-import SolidGithubIcon from "./components/IconSocial/SolidGithubIcon.vue";
-import SolidInstagramIcon from "./components/IconSocial/SolidInstagramIcon.vue";
-import SolidLinkedinIcon from "./components/IconSocial/SolidLinkedinIcon.vue";
-import simpleRouter from "./services/simpleRouter";
+import IconSocial from "./components/IconSocial/IconSocial.vue";
 
-if(simpleRouter.getPageId() === "e404")
-	simpleRouter.redirectTo("/");
+import CustomInputColor from "./components/CustomInputColor.vue";
 
-const showPage = ref(simpleRouter.getPageId());
+const currentUrlHash = ref(window.location.hash);
 
-const isHomePage = computed(() => showPage.value == "home");
-const isGeneratePage = computed(() => showPage.value == "generate");
-const isE404Page = computed(() => showPage.value == "e404");
+window.addEventListener("hashchange", () => {
+	currentUrlHash.value = window.location.hash;
+});
 
-const redirectToGenerate = () => {
-	simpleRouter.redirectTo("/ColorThemeGenerator/generate", () => {
-		showPage.value = "generate";
-	});
-};
+const showPage = computed(() => {
+	return currentUrlHash.value == "generate" ? "generate" : "home";
+});
 
-const redirectToHome = () => {
-	simpleRouter.redirectTo("/ColorThemeGenerator/", () => {
-		showPage.value = "home";
-	});
+const test = (val) => {
+	console.log(val);
 };
 </script>
 <template>
 <div class="bg-gray-100 min-h-screen">
-	<PageHome v-if="isHomePage" @newTheme="redirectToGenerate" />
-	<PageGenerate v-if="isGeneratePage" @cancel="redirectToHome" />
-	<footer v-if="!isE404Page" class="bg-gray-900">
+	<PageHome v-if="showPage == 'home'" />
+	<PageGenerate v-if="showPage == 'generate'" />
+
+	<div class="flex py-24">
+		<div class="w-1/2 mx-auto">
+			<CustomInputColor @change="test" />
+		</div>
+	</div>
+
+	<footer class="bg-gray-900">
 		<div class="container">
 			<div class="flex flex-col md:flex-row justify-center md:justify-between items-center">
 				<p class="text-gray-300 text-center text-sm pt-16 md:pt-8 pb-8 px-12 md:px-0">&copy; Color Theme Generator by <a href="#" class="font-semibold text-gray-200 transition-colors duration-200 ease-in-out hover:text-indigo-500">Muhammad Sabri</a>. 2022</p>
 				<div class="flex justify-center items-center py-8">
 					<a href="#" class="social-link">
-						<SolidEnvelopeIcon />
+						<IconSocial icon="SolidEnvelopeIcon" />
 					</a>
 					<a href="#" class="social-link">
-						<SolidGithubIcon />
+						<IconSocial icon="SolidGithubIcon" />
 					</a>
 					<a href="#" class="social-link">
-						<SolidLinkedinIcon />
+						<IconSocial icon="SolidLinkedinIcon" />
 					</a>
 					<a href="#" class="social-link">
-						<SolidInstagramIcon />
+						<IconSocial icon="SolidInstagramIcon" />
 					</a>
 				</div>
 			</div>
