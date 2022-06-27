@@ -4,8 +4,6 @@ import PageHome from "./components/PageHome.vue";
 import PageGenerate from "./components/PageGenerate.vue";
 import IconSocial from "./components/IconSocial/IconSocial.vue";
 
-import CustomInputColor from "./components/CustomInputColor.vue";
-
 const currentUrlHash = ref(window.location.hash);
 
 window.addEventListener("hashchange", () => {
@@ -13,7 +11,7 @@ window.addEventListener("hashchange", () => {
 });
 
 const showPage = computed(() => {
-	return currentUrlHash.value == "generate" ? "generate" : "home";
+	return currentUrlHash.value == "#generate" ? "generate" : "home";
 });
 
 const test = (val) => {
@@ -24,13 +22,6 @@ const test = (val) => {
 <div class="bg-gray-100 min-h-screen">
 	<PageHome v-if="showPage == 'home'" />
 	<PageGenerate v-if="showPage == 'generate'" />
-
-	<div class="flex py-24">
-		<div class="w-1/2 mx-auto">
-			<CustomInputColor @change="test" />
-		</div>
-	</div>
-
 	<footer class="bg-gray-900">
 		<div class="container">
 			<div class="flex flex-col md:flex-row justify-center md:justify-between items-center">

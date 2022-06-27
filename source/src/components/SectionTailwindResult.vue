@@ -1,9 +1,9 @@
 <script>
-import CodeEditor from "./CodeEditor.vue";
+import PanelCodeEditor from "./PanelCodeEditor.vue";
 import copyHtmlToClipboard from "./../services/copyHtmlToClipboard";
 
 export default {
-	components: { CodeEditor },
+	components: { PanelCodeEditor },
 	data(){
 		return {
 			colors: {},
@@ -40,7 +40,7 @@ export default {
 </script>
 <template>
 	<section>
-		<CodeEditor ref="codeEditor" @copy=copyCode>
+		<PanelCodeEditor ref="codeEditor" @copy=copyCode>
 <pre ref="codeContent"><span class="comment">// tailwind.config.js</span>
 <span class="red">module</span>.exports = {
   content: [<span class="green">'./src/**/*.{html,js}'</span>],
@@ -57,6 +57,6 @@ export default {
   },
   plugins: []
 }</pre>
-		</CodeEditor>
+		</PanelCodeEditor>
 	</section>
 </template>

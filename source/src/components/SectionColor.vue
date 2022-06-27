@@ -1,5 +1,5 @@
 <script>
-import ColorPanel from "./ColorPanel.vue";
+import PanelColor from "./PanelColor.vue";
 import FixedModal from "./FixedModal.vue";
 import { PlusIcon } from "@heroicons/vue/solid";
 
@@ -9,7 +9,7 @@ import generateColors from "./../services/generateColors";
 import newColorName from "./../services/newColorName";
 
 export default {
-	components: { ColorPanel, FixedModal, PlusIcon },
+	components: { PanelColor, FixedModal, PlusIcon },
 	data(){
 		return {
 			colors: {},
@@ -82,7 +82,7 @@ export default {
 		destroyOthersColor(name){
 			delete this.colors.others[name];
 		},
-		newOthersColor(){
+		async newOthersColor(){
 			this.newColorModal.valid = this.newColorModal.value.length > 0
 				&& this.newColorModal.value.search(/[^a-z1-9]/g) < 0;
 			if(!this.newColorModal.valid)
@@ -90,7 +90,11 @@ export default {
 
 			this.newColorModal.show = false;
 			this.colors.others[this.newColorModal.value] = generateColors();
-			this.newColorModal.value = ""
+			this.newColorModal.value = "";
+
+			await this.$nextTick();
+			const othersColorPanelElm = document.querySelectorAll(".others-color-panel");
+			othersColorPanelElm[othersColorPanelElm.length - 1].scrollIntoView();
 		},
 		openNewColorModal(){
 			this.newColorModal.value = newColorName(Object.keys(this.colors.others));
@@ -102,12 +106,12 @@ export default {
 <template>
 	<section>
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-14 lg:gap-16 px-0 md:px-8 py-8">
-			<ColorPanel title="Primary" name="primary" :colors="colors.primary" :customizable="true" @setColor="changePrimaryColor" @removeColor="removePrimaryColor" />
-			<ColorPanel v-for="(v, k) in colors.others" :title="k[0].toUpperCase() + k.slice(1)" :name="k" :colors="v" :customizable="true" :destroyable="true" :editTitle="true" @setColor="changeOthersColor" @removeColor="removeOthersColor" @destroy="destroyOthersColor" />
-			<ColorPanel title="Dark" name="dark" :colors="colors.dark" @setColor="changeHalfColor" />
-			<ColorPanel title="Light" name="light" :colors="colors.light" @setColor="changeHalfColor" />
+			<PanelColor title="Primary" name="primary" :colors="colors.primary" :customizable="true" @setColor="changePrimaryColor" @removeColor="removePrimaryColor" />
+			<PanelColor v-for="(v, k) in colors.others" :title="k[0].toUpperCase() + k.slice(1)" :name="k" :colors="v" :customizable="true" :destroyable="true" :editTitle="true" @setColor="changeOthersColor" @removeColor="removeOthersColor" @destroy="destroyOthersColor" class="others-color-panel" />
+			<PanelColor title="Dark" name="dark" :colors="colors.dark" @setColor="changeHalfColor" />
+			<PanelColor title="Light" name="light" :colors="colors.light" @setColor="changeHalfColor" />
 			<div>
-				<ColorPanel title="Base Color" name="base" :colors="colors.base" @setColor="changeBaseColor" />
+				<PanelColor title="Base Color" name="base" :colors="colors.base" @setColor="changeBaseColor" />
 			</div>
 		</div>
 		<div class="fixed bottom-8 md:bottom-12 lg:bottom-16 right-8 md:right-16 lg:right-32 z-[7777]">

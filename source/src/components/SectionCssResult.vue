@@ -1,9 +1,9 @@
 <script>
-import CodeEditor from "./CodeEditor.vue";
+import PanelCodeEditor from "./PanelCodeEditor.vue";
 import copyHtmlToClipboard from "./../services/copyHtmlToClipboard";
 
 export default {
-	components: { CodeEditor },
+	components: { PanelCodeEditor },
 	data(){
 		return {
 			colors: {},
@@ -44,9 +44,9 @@ export default {
 };
 </script>
 <template>
-	<CodeEditor ref="codeEditor" @copy=copyCode>
+	<PanelCodeEditor ref="codeEditor" @copy=copyCode>
 <pre ref="codeContent"><span class="red">:root</span> {
 <span v-for="(item, index) in rangesColor">  <span class="red">--{{ item.key }}</span>: <span class="yellow">{{ item.value }}</span>;<br v-if="index < (rangesColor.length - 1)"></span>
 }</pre>
-	</CodeEditor>	
+	</PanelCodeEditor>	
 </template>

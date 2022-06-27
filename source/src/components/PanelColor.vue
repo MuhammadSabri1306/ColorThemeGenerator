@@ -1,9 +1,9 @@
 <script>
 import { LockClosedIcon, LockOpenIcon, MinusCircleIcon } from "@heroicons/vue/solid";
 import { TrashIcon } from "@heroicons/vue/outline";
-import ColorInput from "./ColorInput.vue";
-import ColorCircle from "./ColorCircle.vue";
-import ColorAdd from "./ColorAdd.vue";
+import ButtonChooseColor from "./ButtonChooseColor.vue";
+import LabelColorCircle from "./LabelColorCircle.vue";
+import ButtonAddColor from "./ButtonAddColor.vue";
 
 export default {
 	components: {
@@ -11,9 +11,9 @@ export default {
 		LockOpenIcon,
 		MinusCircleIcon,
 		TrashIcon,
-		ColorInput,
-		ColorCircle,
-		ColorAdd
+		ButtonChooseColor,
+		LabelColorCircle,
+		ButtonAddColor
 	},
 	props: {
 		title: String,
@@ -92,19 +92,19 @@ export default {
 			</button>
 		</div>
 		<div v-if="isLocked" class="flex flex-wrap justify-start items-start mb-4">
-			<ColorCircle v-for="(colorVal, colorKey) in colorCustom" :color="colorVal" :label="colorKey" :circleClassList="['w-16', 'h-16']" :labelClassList="['text-gray-600', 'text-sm', 'font-semibold']" class="m-2" />
+			<LabelColorCircle v-for="(colorVal, colorKey) in colorCustom" :color="colorVal" :label="colorKey" :circleClassList="['w-16', 'h-16']" :labelClassList="['text-gray-600', 'text-sm', 'font-semibold']" class="m-2" />
 		</div>
 		<div v-else class="flex flex-wrap justify-start items-start mb-4">
 			<div v-for="(colorVal, colorKey) in colorCustom" class="relative">
-				<ColorInput :colorName="colorKey" :color="colorVal" @changeColor="setColor" />
+				<ButtonChooseColor :colorName="colorKey" :color="colorVal" @changeColor="setColor" />
 				<button v-if="canUseRemove" class="absolute top-0 right-0 text-gray-400 transition-colors duration-200 ease-in-out hover:text-gray-600" @click="removeColor(colorKey)">
 					<MinusCircleIcon class="w-6 h-6" />
 				</button>
 			</div>
-			<ColorAdd v-if="canUseAdd" :disabledKeys="availableKey" @add="setColor" />
+			<ButtonAddColor v-if="canUseAdd" :disabledKeys="availableKey" @add="setColor" />
 		</div>
 		<div class="flex flex-wrap justify-start items-start">
-			<ColorCircle v-for="(colorVal, colorKey) in colorRange" :color="colorVal" :label="colorKey" :circleClassList="['w-12', 'h-12']" :labelClassList="['text-gray-600', 'text-sm', 'font-semibold']" class="m-2" />
+			<LabelColorCircle v-for="(colorVal, colorKey) in colorRange" :color="colorVal" :label="colorKey" :circleClassList="['w-12', 'h-12']" :labelClassList="['text-gray-600', 'text-sm', 'font-semibold']" class="m-2" />
 		</div>
 	</div>
 </template>
