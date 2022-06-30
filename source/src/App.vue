@@ -13,10 +13,6 @@ window.addEventListener("hashchange", () => {
 const showPage = computed(() => {
 	return currentUrlHash.value == "#generate" ? "generate" : "home";
 });
-
-const test = (val) => {
-	console.log(val);
-};
 </script>
 <template>
 <div class="bg-gray-100 min-h-screen">
@@ -27,16 +23,16 @@ const test = (val) => {
 			<div class="flex flex-col md:flex-row justify-center md:justify-between items-center">
 				<p class="text-gray-300 text-center text-sm pt-16 md:pt-8 pb-8 px-12 md:px-0">&copy; Color Theme Generator by <a href="#" class="font-semibold text-gray-200 transition-colors duration-200 ease-in-out hover:text-indigo-500">Muhammad Sabri</a>. 2022</p>
 				<div class="flex justify-center items-center py-8">
-					<a href="#" class="social-link">
+					<a href="mailto:muhammadsabri1306@gmail.com" class="social-link">
 						<IconSocial icon="SolidEnvelopeIcon" />
 					</a>
-					<a href="#" class="social-link">
+					<a href="https://github.com/MuhammadSabri1306" class="social-link">
 						<IconSocial icon="SolidGithubIcon" />
 					</a>
-					<a href="#" class="social-link">
+					<a href="https://www.linkedin.com/in/sabri-muhammad-3355061a3/" class="social-link">
 						<IconSocial icon="SolidLinkedinIcon" />
 					</a>
-					<a href="#" class="social-link">
+					<a href="https://www.instagram.com/initial.sa/" class="social-link">
 						<IconSocial icon="SolidInstagramIcon" />
 					</a>
 				</div>
