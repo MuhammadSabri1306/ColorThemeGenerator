@@ -42,7 +42,7 @@ onUnmounted(() => window.removeEventListener("scroll", heroOnScroll));
 }
 
 .hero {
-	background-image: url(/galaxy.webp), linear-gradient(#ddd, #000), radial-gradient(transparent, #000);
+	background-image: url(/assets/galaxy.webp), linear-gradient(#ddd, #000), radial-gradient(transparent, #000);
     background-repeat: no-repeat;
     background-size: 100% auto, 100%, 100%;
     background-position: 50%;
@@ -77,7 +77,7 @@ onUnmounted(() => window.removeEventListener("scroll", heroOnScroll));
 					</span>
 					<span>
 						<a href="https://muhammadsabri1306.github.io/" target="_blank" class="relative inline-flex items-center pl-12 pr-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-							<img src="/meow-icon.png" class="absolute w-6 h-6 left-4 top-1/2 -translate-y-1/2" alt="My cat illustration icon" />About Me
+							<img src="/assets/meow-icon.png" class="absolute w-6 h-6 left-4 top-1/2 -translate-y-1/2" alt="My cat illustration icon" />About Me
 						</a>
 					</span>
 				</div>
@@ -104,13 +104,13 @@ onUnmounted(() => window.removeEventListener("scroll", heroOnScroll));
 			<div class="flex justify-center">
 				<a href="https://vuejs.org/" target="_blank" class="inline-flex flex-col lg:flex-row items-center text-sm font-semibold mx-5 md:mx-8 lg:mx-12 text-gray-700 group transition-colors duration-200 ease-in-out hover:text-gray-800">
 					<span class="grow inline-flex">
-						<img src="/vue-logo.png" class="w-12 md:w-24 my-auto drop-shadow-md scale-100 transition-all duration-200 ease-in-out group-hover:scale-90" alt="Vue.js logo">
+						<img src="/assets/vue-logo.png" class="w-12 md:w-24 my-auto drop-shadow-md scale-100 transition-all duration-200 ease-in-out group-hover:scale-90" alt="Vue.js logo">
 					</span>
 					<span class="mt-4 lg:mt-5">Vue.js</span>
 				</a>
 				<a href="https://vuejs.org/" target="_blank" class="inline-flex flex-col lg:flex-row items-center text-sm font-semibold mx-5 md:mx-8 lg:mx-12 text-gray-700 group transition-colors duration-200 ease-in-out hover:text-gray-800">
 					<span class="grow inline-flex">
-						<img src="/tailwind-css-logo.png" class="w-12 md:w-24 my-auto drop-shadow-md scale-100 transition-all duration-200 ease-in-out group-hover:scale-90" alt="Tailwind CSS logo">
+						<img src="/assets/tailwind-css-logo.png" class="w-12 md:w-24 my-auto drop-shadow-md scale-100 transition-all duration-200 ease-in-out group-hover:scale-90" alt="Tailwind CSS logo">
 					</span>
 					<span class="mt-4 lg:mt-5 lg:ml-1">Tailwind CSS</span>
 				</a>
