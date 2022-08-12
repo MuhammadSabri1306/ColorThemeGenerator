@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onBeforeMount, onMounted } from "vue";
 import W3Color from "./../../services/W3Color";
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/vue/solid";
 
 const emit = defineEmits(["change"]);
 const props = defineProps({ defaultValue: String });
@@ -10,17 +11,39 @@ const hue = ref(0);
 const postX = ref(100);
 const postY = ref(0);
 
+const textInputType = ["hex", "rgb"];
+const textInputTypeIndex = ref(1);
+const getTextInputType = () => {
+	const type = ["hex", "rgb"];
+	return textInputType[textInputTypeIndex.value] ? textInputType[textInputTypeIndex.value] : textInputType[0];
+};
+const setTextInputType = type => {
+	const index = textInputType.indexOf(type);
+	textInputTypeIndex.value = index < 0 ? 0 : index;
+};
+const changeTextInputType = () => {
+	let val = textInputTypeIndex.value + 1;
+	if(val >= textInputType.length)
+		val = 0;
+	textInputTypeIndex.value = val;
+};
+
 const wrapper = ref(null);
 const isPickerDrag = ref(false);
 const isHueRangeSlide = ref(false);
 
-onBeforeMount(() => {
-	color.value = new W3Color("hex", [props.defaultValue || "#ff0000"]);
+const setColor = w3color => {
+	color.value = w3color;
 	const { h, s, v } = color.value.toHsv();
 
 	hue.value = h;
 	postX.value = s;
 	postY.value = 100 - v;
+};
+
+onBeforeMount(() => {
+	const w3color = new W3Color("hex", [props.defaultValue || "#ff0000"]);
+	setColor(w3color);
 });
 
 const bgGradient = computed(() => {
@@ -99,7 +122,6 @@ const slideHueRange = value => {
 };
 
 // Color Picker & Hue Slider events
-
 const onMove = e => {
 	isPickerDrag.value && dragPicker(e);
 	isHueRangeSlide.value && slideHueRange(e.target.value);
@@ -113,6 +135,60 @@ document.body.addEventListener("mousemove", onMove);
 document.body.addEventListener("mouseup", onUp);
 document.body.addEventListener("touchmove", onMove);
 document.body.addEventListener("touchend", onUp);
+
+const changeColorByInputText = (val, type) => {
+	let w3color = null;
+
+	switch(type){
+		case "hex": w3color = new W3Color("hex", [val]); break;
+		case "rgb":
+			const colorValueRgb = color.value.toRgb();
+			const rgb = {
+				r: val.r ? val.r : colorValueRgb.r,
+				g: val.g ? val.g : colorValueRgb.g,
+				b: val.b ? val.b : colorValueRgb.b
+			};
+			w3color = new W3Color("rgb", [rgb.r, rgb.g, rgb.b]);
+			break;
+	}
+
+	setColor(w3color);
+	emit("change", color.value.toHexString());
+};
+
+const hexInputChange = e => {
+	let hexColor = e.target.value;
+
+	if(hexColor[0] != "#")
+		hexColor = "#" + hexColor;
+
+	if(hexColor.length > 7)
+		hexColor = hexColor.slice(0, 7);
+	else {
+		hexColor = hexColor.slice(1);
+		for(let i = hexColor.length; i < 6; i++){
+			hexColor = hexColor + "0";
+		}
+		hexColor = "#" + hexColor;
+	}
+
+	changeColorByInputText(hexColor, "hex");
+};
+
+const rgbInputChangeR = e => {
+	const r = e.target.value.replace(/\D/g, "");
+	changeColorByInputText({ r }, "rgb");
+};
+
+const rgbInputChangeG = e => {
+	const g = e.target.value.replace(/\D/g, "");
+	changeColorByInputText({ g }, "rgb");
+};
+
+const rgbInputChangeB = e => {
+	const b = e.target.value.replace(/\D/g, "");
+	changeColorByInputText({ b }, "rgb");
+};
 </script>
 <style scoped>
 input[type="range"]::-webkit-slider-thumb {
@@ -151,7 +227,26 @@ input[type="range"]::-moz-range-thumb {
 					<input @mousedown="startSlideHueRange" @change="endSlideHueRange" type="range" name="hueRange" min="0" max="360" :value="hue" class="appearance-none h-4 grow cursor-pointer focus:outline-none" :style="bgHue()">
 					<span class="w-10 text-right text-gray-600">{{ hue }}</span>
 				</div>
-				<p class="border border-gray-300 shadow-[0_0_2px_rgba(0,0,0,0.4) rounded text-center text-gray-700 py-1 px-3">{{ color.toHexString() }}</p>
+				<div class="flex items-center">
+					<div v-if="getTextInputType() == 'hex'" class="grow grid">
+						<input :value="color.toHexString()" @change="hexInputChange" @keyup.enter="hexInputChange" type="text" class="px-4 py-1 border rounded-md border-gray-300 text-gray-700 bg-white text-left hover:border-gray-400 focus:outline-none">
+					</div>
+					<div v-if="getTextInputType() == 'rgb'" class="grow grid grid-cols-3 gap-4">
+						<div>
+							<input :value="color.toRgb().r" @change="rgbInputChangeR" @keyup.enter="rgbInputChangeR" type="text" class="w-full px-4 py-1 border rounded-md border-gray-300 text-gray-700 bg-white text-left hover:border-gray-400 focus:outline-none">
+						</div>
+						<div>
+							<input :value="color.toRgb().g" @change="rgbInputChangeG" @keyup.enter="rgbInputChangeG" type="text" class="w-full px-4 py-1 border rounded-md border-gray-300 text-gray-700 bg-white text-left hover:border-gray-400 focus:outline-none">
+						</div>
+						<div>
+							<input :value="color.toRgb().b" @change="rgbInputChangeB" @keyup.enter="rgbInputChangeB" type="text" class="w-full px-4 py-1 border rounded-md border-gray-300 text-gray-700 bg-white text-left hover:border-gray-400 focus:outline-none">
+						</div>
+					</div>
+					<button @click="changeTextInputType" type="button" class="flex flex-col justify-center items-center ml-4 px-4 py-2 text-gray-500 hover:text-gray-700 focus:outline-none">
+						<ChevronUpIcon class="w-4 h-4 -mb-1" />
+						<ChevronDownIcon class="w-4 h-4" />
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
