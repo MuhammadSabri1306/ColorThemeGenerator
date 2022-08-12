@@ -39,38 +39,29 @@ const bgHue = () => {
 const pickerPostStyles = computed(() => {
 	return {
 		left: postX.value + "%",
-		top: postY.value + "%"
+		top: postY.value + "%",
+		transform: `translate(-${ 30 + postX.value / 2 }%, -${ 30 + postY.value / 2 }%)`
 	};
 });
 
+// Color Picker
+
 const movePicker = (x, y, err = null) => {
-	const offset = wrapper.value.getBoundingClientRect();
-	
-	const outCheck = [{
-		condition: x < offset.left,
-		callback: () => postX.value = 0
-	}, {
-		condition: x > offset.right,
-		callback: () => postX.value = 100
-	}, {
-		condition: y < offset.top,
-		callback: () => postY.value = 0
-	}, {
-		condition: y > offset.bottom,
-		callback: () => postY.value = 100
-	}].filter(checker => {
-		if(checker.condition === true)
-			checker.callback();
-		return checker.condition;
-	}).length;
+	const { left, right, top, bottom, width, height } = wrapper.value.getBoundingClientRect();
 
-	if(outCheck > 0){
-		err && err();
-		return;
-	}
+	if(x < left)
+		postX.value = 0;
+	else if(x > right)
+		postX.value = 100;
+	else
+		postX.value = (x - left) / width * 100;
 
-	postX.value = (x - offset.left) / offset.width * 100;
-	postY.value = (y - offset.top) / offset.height * 100;
+	if(y < top)
+		postY.value = 0;
+	else if(y > bottom)
+		postY.value = 100;
+	else
+		postY.value = (y - top) / height * 100;
 };
 
 const endDragPicker = () => {
@@ -93,25 +84,35 @@ const dragPicker = event => {
 	emit("change", color.value.toHexString());
 };
 
+// Hue Slider
 const startSlideHueRange = () => isHueRangeSlide.value = true;
-const endSlideHueRange = () => isHueRangeSlide.value = false;
-const slideHueRange = event => {
-	if(!isHueRangeSlide.value) return;
-	hue.value = event.target.value;
-	color.value = new W3Color("hsv", [hue.value, postX.value, 100 - postY.value]);
+
+const endSlideHueRange = () => {
+	isHueRangeSlide.value = false;
+	emit("change", color.value.toHexString());
 };
 
-document.body.addEventListener("mouseup", () => {
-	isPickerDrag.value && endDragPicker();
-	isHueRangeSlide.value && endSlideHueRange();
-});
+const slideHueRange = value => {
+	hue.value = value;
+	color.value = new W3Color("hsv", [hue.value, postX.value, 100 - postY.value]);
+	emit("change", color.value.toHexString());
+};
 
-if(event.touches === 1){
-	document.body.addEventListener("touchend", () => {
-		isPickerDrag.value && endDragPicker();
-		isHueRangeSlide.value && endSlideHueRange();
-	});
-}
+// Color Picker & Hue Slider events
+
+const onMove = e => {
+	isPickerDrag.value && dragPicker(e);
+	isHueRangeSlide.value && slideHueRange(e.target.value);
+};
+
+const onUp = () => {
+	isPickerDrag.value && endDragPicker();
+};
+
+document.body.addEventListener("mousemove", onMove);
+document.body.addEventListener("mouseup", onUp);
+document.body.addEventListener("touchmove", onMove);
+document.body.addEventListener("touchend", onUp);
 </script>
 <style scoped>
 input[type="range"]::-webkit-slider-thumb {
@@ -140,14 +141,14 @@ input[type="range"]::-moz-range-thumb {
 </style>
 <template>
 	<div>
-		<div ref="wrapper" @mousedown="startDragPicker" @touchstart="startDragPicker" @mousemove="dragPicker" @touchmove="dragPicker" class="relative aspect-[2/1] cursor-move mb-8 before:absolute before:w-full before:h-full before:top-0 before:left-0 before:bg-gradient-to-t before:from-black before:to-transparent" :style="{ background: bgGradient }">
-			<div class="absolute w-4 h-4 border-2 border-gray-100 rounded-full shadow-[0_0_0.5rem_rgba(0,0,0,0.4)] -translate-x-1/2 -translate-y-1/2" :style="pickerPostStyles"></div>
+		<div ref="wrapper" @mousedown="startDragPicker" @touchstart="startDragPicker" class="relative aspect-[2/1] cursor-move mb-8 before:absolute before:w-full before:h-full before:top-0 before:left-0 before:bg-gradient-to-t before:from-black before:to-transparent" :style="{ background: bgGradient }">
+			<div class="absolute w-4 h-4 border-2 border-gray-100 rounded-full shadow-[0_0_0.5rem_rgba(0,0,0,0.4)]" :style="pickerPostStyles"></div>
 		</div>
 		<div class="grid grid-cols-[1fr_2fr]">
 			<div class="aspect-square border border-gray-300 rounded-full shadow-sm mr-4" :style="{ background: color.toHexString() }"></div>
 			<div class="mt-2">
 				<div class="flex items-center mb-4">
-					<input @mousedown="startSlideHueRange" @touchstart="startSlideHueRange" @mousemove="slideHueRange" @touchmove="slideHueRange" type="range" name="hueRange" min="0" max="360" :value="hue" class="appearance-none h-4 grow cursor-pointer focus:outline-none" :style="bgHue()">
+					<input @mousedown="startSlideHueRange" @change="endSlideHueRange" type="range" name="hueRange" min="0" max="360" :value="hue" class="appearance-none h-4 grow cursor-pointer focus:outline-none" :style="bgHue()">
 					<span class="w-10 text-right text-gray-600">{{ hue }}</span>
 				</div>
 				<p class="border border-gray-300 shadow-[0_0_2px_rgba(0,0,0,0.4) rounded text-center text-gray-700 py-1 px-3">{{ color.toHexString() }}</p>
