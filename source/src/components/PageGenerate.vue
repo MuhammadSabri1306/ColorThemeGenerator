@@ -1,65 +1,36 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+
 import Navigation from "./Navigation.vue";
 import SectionColor from "./SectionColor.vue";
 import SectionTailwindResult from "./SectionTailwindResult.vue";
 import SectionCssResult from "./SectionCssResult.vue";
 import { ColorSwatchIcon } from "@heroicons/vue/solid";
 
+const store = useStore();
+const colors = computed(() => store.colors);
+store.commit("setupColors");
+
 const activeSection = ref(1),
 	sectionColor = ref(null),
 	sectionTailwindResult = ref(null),
 	sectionCssResult = ref(null);
 
-
-const getColors = () => {
-	const initColors = { ...sectionColor.value.colors },
-		colors = {};
-
-	const copyColorItem = (target, colorName) => {
-		colors[colorName] = {};
-
-		Object.keys(target[colorName].generated).forEach(key => {
-			colors[colorName][key] = target[colorName].generated[key];
-		});
-	};
-
-	const baseColors = ["black", "white"],
-		secondColors = ["dark", "light", "primary"],
-		otherColors = Object.keys(initColors.others);
-
-	baseColors.forEach(item => colors[item] = initColors.base.custom[item]);
-	secondColors.forEach(item => copyColorItem(initColors, item));
-	otherColors.forEach(item => copyColorItem(initColors.others, item));
-
-	return colors;
-};
-
 const newTheme = () => {
 	if(!confirm("Your generated theme will delete! Ready for new theme?"))
 		return;
 
-	sectionColor.value.setup();
-	sectionTailwindResult.value.init(getColors());
-	sectionCssResult.value.init(getColors());
-
+	store.commit("setupColors");
 	activeSection.value = 1;
 };
 
 const navigationListener = navIndex => {
-	if(navIndex == 0)
-		return newTheme();
-
-	if([1, 2, 3].indexOf(navIndex) < 0)
+	if(navIndex < 0 || navIndex > 3)
 		return console.error(`undefined action for navIndex = ${ navIndex } on navigationListener(), PageGenerate.vue`);
 	
-	const action = {
-		1: () => false,
-		2: () => sectionTailwindResult.value.init(getColors()),
-		3: () => sectionCssResult.value.init(getColors())
-	};
-
-	action[navIndex]();
+	if(navIndex == 0)
+		return newTheme();
 	activeSection.value = navIndex;
 };
 </script>

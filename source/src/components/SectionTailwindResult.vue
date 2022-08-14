@@ -4,33 +4,16 @@ import copyHtmlToClipboard from "./../services/copyHtmlToClipboard";
 
 export default {
 	components: { PanelCodeEditor },
-	data(){
-		return {
-			colors: {},
-			hasInit: false
-		};
-	},
 	computed: {
+		base(){
+			const { black, white } = this.$store.getters.twResult;
+			return { black, white };
+		},
 		rangesColor(){
-			if(!this.hasInit)
-				return [];
-
-			return Object.entries(this.colors)
-				.filter(([ key, val ]) => key != "black" && key != "white")
-				.map(([ key, val ]) => {
-					val = Object.entries(val).map(([ childKey, childVal ]) => {
-						return { key: childKey, val: childVal };
-					});
-
-					return { key, val };
-				});
+			return this.$store.getters.twResult.ranges;
 		}
 	},
 	methods: {
-		init(colors){
-			this.colors = colors;
-			this.hasInit = true;
-		},
 		copyCode(){
 			const copyStatus = copyHtmlToClipboard(this.$refs.codeContent) ? 1 : 0;
 			this.$refs.codeEditor.setCopyStatus(copyStatus);
@@ -48,8 +31,8 @@ export default {
     colors: {
       transparent: <span class="green">'transparent'</span>,
       current: <span class="green">'currentColor'</span>,
-<span class="green">      'black'</span>: <span class="green">'{{ colors.black }}'</span>
-<span class="green">      'white'</span>: <span class="green">'{{ colors.white }}'</span>,
+<span class="green">      'black'</span>: <span class="green">'{{ base.black }}'</span>
+<span class="green">      'white'</span>: <span class="green">'{{ base.white }}'</span>,
 <span v-for="(item, index) in rangesColor"><br v-if="index > 0"><span class="green">      '{{ item.key }}'</span>: {
 <span v-for="(childItem, childIndex) in item.val"><br v-if="childIndex > 0"><span class="green">        '{{ childItem.key }}'</span>: <span class="green">'{{ childItem.val }}'</span><span v-if="childIndex < (item.val.length - 1)">,</span></span>
       }<span v-if="index < (rangesColor.length - 1)">,</span></span>

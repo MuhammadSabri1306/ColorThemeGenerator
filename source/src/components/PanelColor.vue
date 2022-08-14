@@ -19,7 +19,7 @@ export default {
 		title: String,
 		lock: Boolean,
 		name: String,
-		colors: Object,
+		color: Object,
 		customizable: Boolean,
 		destroyable: Boolean,
 		editTitle: Boolean
@@ -32,13 +32,13 @@ export default {
 	},
 	computed: {
 		colorCustom(){
-			return this.colors.custom;
+			return this.color.node;
 		},
 		colorRange(){
-			return this.colors.generated;
+			return this.color.values;
 		},
 		availableKey(){
-			return Object.keys(this.colors.custom);
+			return Object.keys(this.color.node);
 		},
 		canUseAdd(){
 			return this.customizable && Object.keys(this.colorCustom).length < 9;

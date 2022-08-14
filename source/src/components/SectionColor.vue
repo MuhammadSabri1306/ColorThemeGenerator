@@ -12,7 +12,6 @@ export default {
 	components: { PanelColor, FixedModal, PlusIcon },
 	data(){
 		return {
-			colors: {},
 			newColorModal: {
 				value: "",
 				show: false,
@@ -20,67 +19,38 @@ export default {
 			}
 		};
 	},
-	created(){
-		this.setup();
+	computed: {
+		colors(){
+			return this.$store.state.colors;
+		}
 	},
 	methods: {
-		setup(){
-			const dPalette = JSON.parse(JSON.stringify(defaultPalette));
-			const halfColors = generateHalfColors(dPalette.half.light, dPalette.half.dark);
-
-			const base = { custom: dPalette.base },
-				dark = halfColors.dark,
-				light = halfColors.light,
-				primary = generateColors(dPalette.primary),
-				others = {};
-			this.colors = { base, dark, light, primary, others };
+		setBaseColor({ key, val }){
+			this.$store.commit("updateBaseColor", { key, val });
 		},
-		changeBaseColor({ key, val }){
-			this.colors.base.custom[key] = val;
+		setHalfColor({ name, key, val }){
+			this.$store.commit("updateHalfColor", { name, key, val });
 		},
-		changeHalfColor({ name, key, val }){
-			if(["light", "dark"].indexOf(name) < 0)
+		setPrimaryColorNode({ key, val }){
+			this.$store.commit("updatePaletteColor", { name: "primary", key, val });
+		},
+		removePrimaryColorNode({ key }){
+			this.$store.commit("updatePaletteColor", { name: "primary", key });
+		},
+		setOthersColorNode({ name, key, val }){
+			if(!this.colors.others[name])
 				return;
-
-			const prevColors = {
-				light: this.colors.light.custom[100],
-				dark: this.colors.dark.custom[900]
-			};
-			prevColors[name] = val;
-
-			const halfColors = generateHalfColors(prevColors.light, prevColors.dark);
-			this.colors.light = halfColors.light;
-			this.colors.dark = halfColors.dark;
+			this.$store.commit("updatePaletteColor", { name, key, val });
 		},
-		updateColor(params){
-			const { name, key } = params;
-			let colors = params.isPrimary ? this.colors[name].custom : this.colors.others[name].custom;
-
-			if(params.isSetOpr){
-				const { val } = params;
-				colors[key] = val;
-			}
-			else delete colors[key];
-
-			if(params.isPrimary)
-				this.colors[name] = generateColors(colors);
-			else
-				this.colors.others[name] = generateColors(colors);
-		},
-		changePrimaryColor(sendedData){
-			this.updateColor({ isSetOpr:true, isPrimary:true, ...sendedData });
-		},
-		removePrimaryColor(sendedData){
-			this.updateColor({ isSetOpr:false, isPrimary:true, ...sendedData });
-		},
-		changeOthersColor(sendedData){
-			this.updateColor({ isSetOpr:true, isPrimary:false, ...sendedData });
-		},
-		removeOthersColor(sendedData){
-			this.updateColor({ isSetOpr:false, isPrimary:false, ...sendedData });
+		removeOthersColorNode({ name, key }){
+			if(!this.colors.others[name])
+				return;
+			this.$store.commit("updatePaletteColor", { name, key });
 		},
 		destroyOthersColor(name){
-			delete this.colors.others[name];
+			if(!this.colors.others[name])
+				return;
+			this.$store.commit("deleteOthersColor", name);
 		},
 		async newOthersColor(){
 			this.newColorModal.valid = this.newColorModal.value.length > 0
@@ -89,7 +59,7 @@ export default {
 				return;
 
 			this.newColorModal.show = false;
-			this.colors.others[this.newColorModal.value] = generateColors();
+			this.$store.commit("updatePaletteColor", { name: this.newColorModal.value });
 			this.newColorModal.value = "";
 
 			await this.$nextTick();
@@ -97,7 +67,8 @@ export default {
 			othersColorPanelElm[othersColorPanelElm.length - 1].scrollIntoView();
 		},
 		openNewColorModal(){
-			this.newColorModal.value = newColorName(Object.keys(this.colors.others));
+			const regOthersColorsName = Object.keys(this.colors.others);
+			this.newColorModal.value = newColorName(regOthersColorsName);
 			this.newColorModal.show = true;
 		}
 	}
@@ -106,12 +77,12 @@ export default {
 <template>
 	<section>
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-14 lg:gap-16 px-0 md:px-8 py-8">
-			<PanelColor title="Primary" name="primary" :colors="colors.primary" :customizable="true" @setColor="changePrimaryColor" @removeColor="removePrimaryColor" />
-			<PanelColor v-for="(v, k) in colors.others" :title="k[0].toUpperCase() + k.slice(1)" :name="k" :colors="v" :customizable="true" :destroyable="true" :editTitle="true" @setColor="changeOthersColor" @removeColor="removeOthersColor" @destroy="destroyOthersColor" class="others-color-panel" />
-			<PanelColor title="Dark" name="dark" :colors="colors.dark" @setColor="changeHalfColor" />
-			<PanelColor title="Light" name="light" :colors="colors.light" @setColor="changeHalfColor" />
+			<PanelColor title="Primary" name="primary" :color="colors.primary" :customizable="true" @setColor="setPrimaryColorNode" @removeColor="removePrimaryColorNode" />
+			<PanelColor v-for="(v, k) in colors.others" :title="k[0].toUpperCase() + k.slice(1)" :name="k" :color="v" :customizable="true" :destroyable="true" :editTitle="true" @setColor="setOthersColorNode" @removeColor="removeOthersColorNode" @destroy="destroyOthersColor" class="others-color-panel" />
+			<PanelColor title="Dark" name="dark" :color="colors.dark" @setColor="setHalfColor" />
+			<PanelColor title="Light" name="light" :color="colors.light" @setColor="setHalfColor" />
 			<div>
-				<PanelColor title="Base Color" name="base" :colors="colors.base" @setColor="changeBaseColor" />
+				<PanelColor title="Base Color" name="base" :color="colors.base" @setColor="setBaseColor" />
 			</div>
 		</div>
 		<div class="fixed bottom-8 md:bottom-12 lg:bottom-16 right-8 md:right-16 lg:right-32 z-[7777]">
