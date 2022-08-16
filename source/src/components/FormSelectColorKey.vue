@@ -1,6 +1,6 @@
 <script>
 import FixedModal from "./ui/FixedModal.vue";
-import FormSelect from "./CustomForms/FormSelect.vue";
+import FormSelect from "./custom-forms/Select.vue";
 
 export default {
 	components: { FixedModal, FormSelect },
