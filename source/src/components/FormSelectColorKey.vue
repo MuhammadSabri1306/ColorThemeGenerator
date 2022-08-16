@@ -1,24 +1,15 @@
-<script>
+<script setup>
+import { ref, computed } from "vue";
 import FixedModal from "./ui/FixedModal.vue";
 import FormSelect from "./custom-forms/Select.vue";
 
-export default {
-	components: { FixedModal, FormSelect },
-	props: { keyOption: Array },
-	emits: ["cancel", "submit"],
-	data(){
-		return {
-			key: ""
-		};
-	},
-	computed: {
-		formSelectList(){
-			return this.keyOption.map(item => {
-				return { value: item.val, disabled: item.disabled };
-			});
-		}
-	}
-};
+const props = defineProps({ keyOption: Array });
+const emit = defineEmits(["cancel", "submit"]);
+const key = ref("");
+
+const formSelectList = computed(() => props.keyOption.map(({ val, disabled }) => {
+	return { value: val, disabled };
+}));
 </script>
 <template>
 	<FixedModal @close="$emit('cancel')" class="modal-w-auto">
