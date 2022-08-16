@@ -71,7 +71,7 @@
 	}
 
 	.modal:not(.modal-w-auto) > .modal-wrapper {
-		@apply w-[483px] md:w-1/2 lg:w-[965px];
+		@apply w-[483px] md:w-2/3 lg:w-[965px];
 	}
 
 	.modal.modal-w-auto > .modal-wrapper {

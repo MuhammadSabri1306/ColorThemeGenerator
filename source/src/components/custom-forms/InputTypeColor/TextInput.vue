@@ -56,28 +56,31 @@ const rgbBChange = e => changeRGB({ b: e.target.value });
 </script>
 <template>
 	<div class="flex items-center">
-		<div v-if="getType() == 'hex'" class="grow grid">
+		<div v-if="getType() == 'hex'" class="grow grid labelled-input-wrapper after:content-['HEX']">
 			<input :value="color.hex" @change="hexChange" @keyup.enter="hexChange" type="text" class="input-color-text">
 		</div>
-		<div v-if="getType() == 'rgb'" class="grow grid grid-cols-3 gap-4">
-			<div>
+		<div v-if="getType() == 'rgb'" class="grow grid grid-cols-3 gap-1 md:gap-4">
+			<div class="labelled-input-wrapper after:content-['R']">
 				<input :value="color.rgb.r" @change="rgbRChange" @keyup.enter="rgbRChange" type="text" class="input-color-text">
 			</div>
-			<div>
+			<div class="labelled-input-wrapper after:content-['G']">
 				<input :value="color.rgb.g" @change="rgbGChange" @keyup.enter="rgbGChange" type="text" class="input-color-text">
 			</div>
-			<div>
+			<div class="labelled-input-wrapper after:content-['B']">
 				<input :value="color.rgb.b" @change="rgbBChange" @keyup.enter="rgbBChange" type="text" class="input-color-text">
 			</div>
 		</div>
-		<button @click="changeType" type="button" class="flex flex-col justify-center items-center ml-4 px-4 py-2 text-gray-500 hover:text-gray-700 focus:outline-none">
+		<button @click="changeType" type="button" class="flex flex-col justify-center items-center ml-4 md:px-4 py-2 text-gray-500 hover:text-gray-700 focus:outline-none">
 			<ChevronUpIcon class="w-4 h-4 -mb-1" />
 			<ChevronDownIcon class="w-4 h-4" />
 		</button>
 	</div>
 </template>
 <style scoped>
+	.labelled-input-wrapper {
+		@apply relative after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:mt-1 after:text-gray-600 after:text-xs after:font-semibold;
+	}
 	.input-color-text {
-		@apply px-4 py-1 text-center w-full border rounded-md border-gray-300 text-gray-700 bg-white text-left hover:border-gray-400 focus:outline-none;
+		@apply px-1 md:px-4 py-1 text-center w-full border rounded-md border-gray-300 text-gray-700 bg-white text-left hover:border-gray-400 focus:outline-none;
 	}
 </style>
