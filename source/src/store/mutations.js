@@ -6,11 +6,14 @@ import generateColors from "./lib/generateColors";
 export default {
 	setupColors(state){
 		state.colors = createDefaultColors(defaultPalette);
+		state.hasChanged = false;
 	},
 	updateBaseColor(state, { key, val }){
 		if(["black", "white"].indexOf(key) < 0)
 			return;
+
 		state.colors.base.node[key] = val;
+		if(!state.hasChanged) state.hasChanged = true;
 	},
 	updateHalfColor(state, { name, key, val }){
 		if(["light", "dark"].indexOf(name) < 0)
@@ -25,6 +28,7 @@ export default {
 		const halfColors = generateHalfColors(prevColors.light, prevColors.dark);
 		state.colors.light = halfColors.light;
 		state.colors.dark = halfColors.dark;
+		if(!state.hasChanged) state.hasChanged = true;
 	},
 	updatePaletteColor(state, { name, key, val }){
 		if(!name) return;
@@ -54,8 +58,10 @@ export default {
 			state.colors.primary = generateColors(nodes);
 		else if(action === "setOthersNode" || action === "delOthersNode")
 			state.colors.others[name] = generateColors(nodes);	
+		if(!state.hasChanged) state.hasChanged = true;
 	},
 	deleteOthersColor(state, name){
 		delete state.colors.others[name];
+		if(!state.hasChanged) state.hasChanged = true;
 	}
 };

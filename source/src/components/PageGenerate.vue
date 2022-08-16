@@ -6,23 +6,24 @@ import Navigation from "./Navigation.vue";
 import SectionColor from "./SectionColor.vue";
 import SectionTailwindResult from "./SectionTailwindResult.vue";
 import SectionCssResult from "./SectionCssResult.vue";
+import FormConfirm from "./FormConfirm.vue";
 import { ColorSwatchIcon } from "@heroicons/vue/solid";
 
 const store = useStore();
 const colors = computed(() => store.colors);
 store.commit("setupColors");
 
-const activeSection = ref(1),
-	sectionColor = ref(null),
-	sectionTailwindResult = ref(null),
-	sectionCssResult = ref(null);
+const activeSection = ref(1);
+const formConfirm = ref(null);
 
 const newTheme = () => {
-	if(!confirm("Your generated theme will delete! Ready for new theme?"))
-		return;
-
-	store.commit("setupColors");
-	activeSection.value = 1;
+	const message = "Your generated theme will be <span class='font-bold'>deleted!</span> Ready for new theme?";
+	formConfirm.value.confirm(message, "Continue")
+		.then(() => {
+			store.commit("setupColors");
+			activeSection.value = 1;
+		})
+		.catch(() => null);
 };
 
 const navigationListener = navIndex => {
@@ -46,9 +47,10 @@ const navigationListener = navIndex => {
 	</header>
 	<Navigation v-if="activeSection > 0" :activeNavIndex="activeSection" @navigate="navigationListener" />
 	<div class="container py-10">
-		<SectionColor ref="sectionColor" v-show="activeSection == 1" />
-		<SectionTailwindResult ref="sectionTailwindResult" v-show="activeSection == 2" />
-		<SectionCssResult ref="sectionCssResult" v-show="activeSection == 3" />
+		<SectionColor v-show="activeSection == 1" />
+		<SectionTailwindResult v-show="activeSection == 2" />
+		<SectionCssResult v-show="activeSection == 3" />
 	</div>
 </main>
+<FormConfirm ref="formConfirm" />
 </template>
