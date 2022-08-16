@@ -1,13 +1,6 @@
 <script>
-import { reactive } from "vue";
 import { ColorSwatchIcon, PencilIcon, ChevronDownIcon } from "@heroicons/vue/solid";
-
-export default {
-	components: {
-		ColorSwatchIcon, PencilIcon, ChevronDownIcon
-	},
-	emits: ["newTheme"]
-};
+defineEmits(["newTheme"]);
 </script>
 <template>
 	<header class="pt-6 md:pt-10">
