@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import PageHome from "./components/PageHome.vue";
 import PageGenerate from "./components/PageGenerate.vue";
-import IconSocial from "./components/ui/IconSocial.vue";
+import IconSocial from "./components/IconLoader.vue";
 
 const currentUrlHash = ref(window.location.hash);
 
@@ -27,13 +27,13 @@ const showPage = computed(() => {
 						<IconSocial icon="SolidEnvelopeIcon" />
 					</a>
 					<a href="https://github.com/MuhammadSabri1306" class="social-link" target="_blank">
-						<IconSocial icon="SolidGithubIcon" />
+						<IconSocial icon="solid-github-icon" />
 					</a>
 					<a href="https://www.linkedin.com/in/sabri-muhammad-3355061a3/" class="social-link" target="_blank">
-						<IconSocial icon="SolidLinkedinIcon" />
+						<IconSocial icon="solid-linkedin-icon" />
 					</a>
 					<a href="https://www.instagram.com/initial.sa/" class="social-link" target="_blank">
-						<IconSocial icon="SolidInstagramIcon" />
+						<IconSocial icon="solid-instagram-icon" />
 					</a>
 				</div>
 			</div>
