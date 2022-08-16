@@ -71,7 +71,11 @@
 	}
 
 	.modal:not(.modal-w-auto) > .modal-wrapper {
-		@apply md:w-1/2;
+		@apply w-[483px] md:w-1/2 lg:w-[965px];
+	}
+
+	.modal.modal-w-auto > .modal-wrapper {
+		@apply max-w-[483px] lg:max-w-[965px];
 	}
 
 	.modal-header {

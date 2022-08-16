@@ -9,10 +9,10 @@ svg {
 }
 </style>
 <script setup>
-import SolidEnvelopeIcon from "./SolidEnvelopeIcon.vue";
-import SolidGithubIcon from "./SolidGithubIcon.vue";
-import SolidInstagramIcon from "./SolidInstagramIcon.vue";
-import SolidLinkedinIcon from "./SolidLinkedinIcon.vue";
+import SolidEnvelopeIcon from "./IconSocial/SolidEnvelopeIcon.vue";
+import SolidGithubIcon from "./IconSocial/SolidGithubIcon.vue";
+import SolidInstagramIcon from "./IconSocial/SolidInstagramIcon.vue";
+import SolidLinkedinIcon from "./IconSocial/SolidLinkedinIcon.vue";
 
 const icon = { SolidEnvelopeIcon, SolidGithubIcon, SolidInstagramIcon, SolidLinkedinIcon };
 const props = defineProps({ icon: String });

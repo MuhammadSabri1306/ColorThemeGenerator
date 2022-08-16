@@ -1,5 +1,5 @@
 <script>
-import FixedModal from "./FixedModal.vue";
+import FixedModal from "./ui/FixedModal.vue";
 import FormSelect from "./CustomForms/FormSelect.vue";
 
 export default {
@@ -21,7 +21,7 @@ export default {
 };
 </script>
 <template>
-	<FixedModal @close="$emit('cancel')">
+	<FixedModal @close="$emit('cancel')" class="modal-w-auto">
 		<div class="flex items-center px-8 mb-8">
 			<label for="colorKey" class="text-gray-700 mr-4">Color Key</label>
 			<FormSelect :value="key" title="Select color key" :list="formSelectList" @change="(val) => key = val" class="custom-form-select" />

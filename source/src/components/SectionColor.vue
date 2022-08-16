@@ -1,11 +1,8 @@
 <script>
 import PanelColor from "./PanelColor.vue";
-import FixedModal from "./FixedModal.vue";
+import FixedModal from "./ui/FixedModal.vue";
 import { PlusIcon } from "@heroicons/vue/solid";
 
-import defaultPalette from "./../models/defaultPalette";
-import generateHalfColors from "./../services/generateHalfColors";
-import generateColors from "./../services/generateColors";
 import newColorName from "./../services/newColorName";
 
 export default {

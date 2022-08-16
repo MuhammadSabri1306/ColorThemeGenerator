@@ -30,5 +30,5 @@ export default {
 		<button @click="showFormChooseColor = true" type="button" class="rounded-full w-16 h-16 border border-gray-300 btn-hovered-shadow" :name="colorName" :style="{ backgroundColor: color }" :disabled="isDisabled"></button>
 		<label v-if="colorName" for="colorName" class="text-gray-600 font-semibold text-sm mt-2">{{ colorName }}</label>
 	</div>
-	<FormChooseColor v-if="showFormChooseColor" @submit="changeColor" @cancel="showFormChooseColor = false" />
+	<FormChooseColor v-if="showFormChooseColor" :defaultValue="color" @submit="changeColor" @cancel="showFormChooseColor = false" />
 </template>

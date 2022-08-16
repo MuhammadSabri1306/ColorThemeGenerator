@@ -1,3 +1,6 @@
+import tailwindPalette from "./data/tailwindPalette";
+import searchAlgorithm from "./lib/searchAlgorithm";
+
 const objToArr = obj => {
 	return Object.entries(obj).map(([key, val]) => {
 		return { key, val };
@@ -5,7 +8,10 @@ const objToArr = obj => {
 };
 
 export default {
-	colorsResult(state){
+	searchTailwindName(){
+		return searchKey => searchAlgorithm(searchKey, tailwindPalette);
+	},
+	format(state){
 		const colors = {
 			...state.colors.base.node,
 			dark: { ...state.colors.dark.values },
@@ -20,7 +26,7 @@ export default {
 		return colors;
 	},
 	twResult(state, getters){
-		const { black, white, ...rangeColors } = getters.colorsResult;
+		const { black, white, ...rangeColors } = getters.format;
 		const ranges = objToArr(rangeColors).map(({ key, val }) => {
 			val = objToArr(val);
 			return { key, val };
@@ -28,8 +34,8 @@ export default {
 
 		return { black, white, ranges };
 	},
-	cssResult(state, getters){
-		const { black, white, ...rangeColors } = getters.colorsResult;
+	css(state, getters){
+		const { black, white, ...rangeColors } = getters.format;
 		let result = objToArr({ black, white });
 
 		Object.entries(rangeColors).forEach(([name, nodes]) => {

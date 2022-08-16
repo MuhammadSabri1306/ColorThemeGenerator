@@ -2,7 +2,7 @@
 import { LockClosedIcon, LockOpenIcon, MinusCircleIcon } from "@heroicons/vue/solid";
 import { TrashIcon } from "@heroicons/vue/outline";
 import ButtonChooseColor from "./ButtonChooseColor.vue";
-import LabelColorCircle from "./LabelColorCircle.vue";
+import ColorViewCircle from "./ui/ColorViewCircle.vue";
 import ButtonAddColor from "./ButtonAddColor.vue";
 
 export default {
@@ -12,7 +12,7 @@ export default {
 		MinusCircleIcon,
 		TrashIcon,
 		ButtonChooseColor,
-		LabelColorCircle,
+		ColorViewCircle,
 		ButtonAddColor
 	},
 	props: {
@@ -92,7 +92,7 @@ export default {
 			</button>
 		</div>
 		<div v-if="isLocked" class="flex flex-wrap justify-start items-start mb-4">
-			<LabelColorCircle v-for="(colorVal, colorKey) in colorCustom" :color="colorVal" :label="colorKey" :circleClassList="['w-16', 'h-16']" :labelClassList="['text-gray-600', 'text-sm', 'font-semibold']" class="m-2" />
+			<ColorViewCircle v-for="(colorVal, colorKey) in colorCustom" :color="colorVal" :label="colorKey" :circleClassList="['w-16', 'h-16']" :labelClassList="['text-gray-600', 'text-sm', 'font-semibold']" class="m-2" />
 		</div>
 		<div v-else class="flex flex-wrap justify-start items-start mb-4">
 			<div v-for="(colorVal, colorKey) in colorCustom" class="relative">
@@ -104,7 +104,7 @@ export default {
 			<ButtonAddColor v-if="canUseAdd" :disabledKeys="availableKey" @add="setColor" />
 		</div>
 		<div class="flex flex-wrap justify-start items-start">
-			<LabelColorCircle v-for="(colorVal, colorKey) in colorRange" :color="colorVal" :label="colorKey" :circleClassList="['w-12', 'h-12']" :labelClassList="['text-gray-600', 'text-sm', 'font-semibold']" class="m-2" />
+			<ColorViewCircle v-for="(colorVal, colorKey) in colorRange" :color="colorVal" :label="colorKey" :circleClassList="['w-12', 'h-12']" :labelClassList="['text-gray-600', 'text-sm', 'font-semibold']" class="m-2" />
 		</div>
 	</div>
 </template>

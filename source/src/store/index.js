@@ -2,17 +2,14 @@ import { createStore, createLogger } from "vuex";
 
 import getters from "./getters";
 import mutations from "./mutations";
-import tailwindPalette from "./data/tailwindPalette";
 
-const state = {
-	colors: {},
-	twPalette: tailwindPalette
-};
+import colorPicker from "./modules/colorPicker";
 
 export default createStore({
-	state,
+	state: { colors: {} },
 	getters,
 	mutations,
+	modules: { colorPicker },
 	plugins: process.env.NODE_ENV !== "production" ? [createLogger()] : [],
 	strict: process.env.NODE_ENV !== "production"
 });

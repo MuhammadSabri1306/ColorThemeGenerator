@@ -57,5 +57,5 @@ export default {
 	},
 	deleteOthersColor(state, name){
 		delete state.colors.others[name];
-	},
+	}
 };

@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import PageHome from "./components/PageHome.vue";
 import PageGenerate from "./components/PageGenerate.vue";
-import IconSocial from "./components/IconSocial/IconSocial.vue";
+import IconSocial from "./components/ui/IconSocial.vue";
 
 const currentUrlHash = ref(window.location.hash);
 
