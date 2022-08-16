@@ -57,17 +57,17 @@ const rgbBChange = e => changeRGB({ b: e.target.value });
 <template>
 	<div class="flex items-center">
 		<div v-if="getType() == 'hex'" class="grow grid labelled-input-wrapper after:content-['HEX']">
-			<input :value="color.hex" @change="hexChange" @keyup.enter="hexChange" type="text" class="input-color-text">
+			<input :value="color.hex" @change="hexChange" @keyup.enter="hexChange" type="text" class="input-color-text" autocomplete="off">
 		</div>
 		<div v-if="getType() == 'rgb'" class="grow grid grid-cols-3 gap-1 md:gap-4">
 			<div class="labelled-input-wrapper after:content-['R']">
-				<input :value="color.rgb.r" @change="rgbRChange" @keyup.enter="rgbRChange" type="text" class="input-color-text">
+				<input :value="color.rgb.r" @change="rgbRChange" @keyup.enter="rgbRChange" type="text" class="input-color-text" autocomplete="off">
 			</div>
 			<div class="labelled-input-wrapper after:content-['G']">
-				<input :value="color.rgb.g" @change="rgbGChange" @keyup.enter="rgbGChange" type="text" class="input-color-text">
+				<input :value="color.rgb.g" @change="rgbGChange" @keyup.enter="rgbGChange" type="text" class="input-color-text" autocomplete="off">
 			</div>
 			<div class="labelled-input-wrapper after:content-['B']">
-				<input :value="color.rgb.b" @change="rgbBChange" @keyup.enter="rgbBChange" type="text" class="input-color-text">
+				<input :value="color.rgb.b" @change="rgbBChange" @keyup.enter="rgbBChange" type="text" class="input-color-text" autocomplete="off">
 			</div>
 		</div>
 		<button @click="changeType" type="button" class="flex flex-col justify-center items-center ml-4 md:px-4 py-2 text-gray-500 hover:text-gray-700 focus:outline-none">
