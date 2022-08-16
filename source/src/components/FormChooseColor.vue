@@ -3,7 +3,7 @@ import { ref, computed, onBeforeMount, onMounted } from "vue";
 import { useStore } from "vuex";
 import FixedModal from "./ui/FixedModal.vue";
 import ColorViewCircle from "./ui/ColorViewCircle.vue";
-import InputColor from "./CustomForms/InputColor.vue";
+import InputTypeColor from "./custom-forms/InputTypeColor/index.vue";
 
 const emit = defineEmits(["submit", "cancel"]);
 const props = defineProps({ defaultValue: String });
@@ -91,7 +91,7 @@ onMounted(() => {
 						</button>
 					</div>
 				</div>
-				<InputColor v-else class="mb-4 px-8" :defaultValue="value" @change="chooseCustomColor" />
+				<InputTypeColor v-else class="mb-4 px-8" :defaultValue="value" @change="chooseCustomColor" />
 			</div>
 			<div class="flex flex-col justify-stretch">
 				<div v-if="value.length > 0 && getActiveTabs() == 'twPalette'" class="flex mb-8 pl-16 pr-16 lg:pl-0 lg:flex-col lg:items-end">

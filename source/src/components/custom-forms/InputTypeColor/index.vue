@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed, onBeforeMount } from "vue";
-import W3Color from "./../../store/lib/W3Color";
-import Picker from "./InputColor/Picker.vue";
-import HueSlider from "./InputColor/HueSlider.vue";
-import TextInput from "./InputColor/TextInput.vue";
+import W3Color from "../../../store/lib/W3Color";
+import Picker from "./Picker.vue";
+import HueSlider from "./HueSlider.vue";
+import TextInput from "./TextInput.vue";
 
 const props = defineProps({ defaultValue: String });
 const emit = defineEmits(["change"]);

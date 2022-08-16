@@ -23,7 +23,7 @@ const getType = () => {
 	const type = ["hex", "rgb"];
 	return type[typeIndex.value] ? type[typeIndex.value] : type[0];
 };
-const changeType = () => typeIndex.value += 1 >= type.length ? -(typeIndex.value) : 1;
+const changeType = () => typeIndex.value += (typeIndex.value == type.length - 1) ? -(typeIndex.value) : 1;
 
 const hexChange = e => {
 	const hex = e.target.value;
