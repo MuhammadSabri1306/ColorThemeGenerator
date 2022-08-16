@@ -1,25 +1,19 @@
-<script>
+<script setup>
+import { ref } from "vue";
 import FormChooseColor from "./FormChooseColor.vue";
 
-export default {
-	components: { FormChooseColor },
-	props: {
-		colorName: String,
-		color: String,
-		isDisabled: Boolean
-	},
-	emits: ['changeColor'],
-	data(){
-		return {
-			showFormChooseColor: false
-		};
-	},
-	methods: {
-		changeColor(colorValue){
-			this.$emit('changeColor', this.colorName, colorValue);
-			this.showFormChooseColor = false;
-		}
-	}
+const props = defineProps({
+	colorName: String,
+	color: String,
+	isDisabled: Boolean
+});
+
+const emit = defineEmits(["changeColor"]);
+const showFormChooseColor = ref(false);
+
+const changeColor = colorValue => {
+	emit("changeColor", props.colorName, colorValue);
+	showFormChooseColor.value = false;
 };
 </script>
 <style scoped>

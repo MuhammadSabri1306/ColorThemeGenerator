@@ -1,7 +1,7 @@
 <script>
 import { LockClosedIcon, LockOpenIcon, MinusCircleIcon } from "@heroicons/vue/solid";
 import { TrashIcon } from "@heroicons/vue/outline";
-import ButtonChooseColor from "./ButtonChooseColor.vue";
+import ButtonChangeColor from "./ButtonChangeColor.vue";
 import ColorViewCircle from "./ui/ColorViewCircle.vue";
 import ButtonAddColor from "./ButtonAddColor.vue";
 
@@ -11,7 +11,7 @@ export default {
 		LockOpenIcon,
 		MinusCircleIcon,
 		TrashIcon,
-		ButtonChooseColor,
+		ButtonChangeColor,
 		ColorViewCircle,
 		ButtonAddColor
 	},
@@ -96,7 +96,7 @@ export default {
 		</div>
 		<div v-else class="flex flex-wrap justify-start items-start mb-4">
 			<div v-for="(colorVal, colorKey) in colorCustom" class="relative">
-				<ButtonChooseColor :colorName="colorKey" :color="colorVal" @changeColor="setColor" />
+				<ButtonChangeColor :colorName="colorKey" :color="colorVal" @changeColor="setColor" />
 				<button v-if="canUseRemove" class="absolute top-0 right-0 text-gray-400 transition-colors duration-200 ease-in-out hover:text-gray-600" @click="removeColor(colorKey)">
 					<MinusCircleIcon class="w-6 h-6" />
 				</button>
