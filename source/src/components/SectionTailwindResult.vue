@@ -1,6 +1,6 @@
 <script>
 import PanelCodeEditor from "./PanelCodeEditor.vue";
-import copyHtmlToClipboard from "./../services/copyHtmlToClipboard";
+import copyHtmlToClipboard from "./modules/copyHtmlToClipboard";
 
 export default {
 	components: { PanelCodeEditor },

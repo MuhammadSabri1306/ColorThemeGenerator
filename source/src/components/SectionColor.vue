@@ -3,7 +3,7 @@ import PanelColor from "./PanelColor.vue";
 import FixedModal from "./ui/FixedModal.vue";
 import { PlusIcon } from "@heroicons/vue/solid";
 
-import newColorName from "./../services/newColorName";
+import newColorName from "./modules/newColorName";
 
 export default {
 	components: { PanelColor, FixedModal, PlusIcon },
