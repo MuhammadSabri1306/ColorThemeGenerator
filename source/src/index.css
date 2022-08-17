@@ -110,7 +110,7 @@
 	.code-editor-content .comment { @apply text-gray-500; }
 
 	footer .social-link {
-		@apply text-xl md:text-2xl text-gray-100 mx-4 md:mx-2 transition-colors duration-200 ease-in-out hover:text-indigo-600
+		@apply text-xl md:text-2xl text-gray-100 mx-4 md:mx-2 transition-colors duration-200 ease-in-out hover:text-indigo-600;
 	}
 }
 
