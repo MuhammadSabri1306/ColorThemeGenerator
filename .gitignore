@@ -11,7 +11,7 @@ source/node_modules
 source/dist
 source/dist-ssr
 source/test.js
-source/test
+source/tests
 *.local
 
 # Editor directories and files
