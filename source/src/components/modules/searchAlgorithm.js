@@ -24,10 +24,23 @@ const searchAlgorithm = (keyword, model, config = {}) => {
 	let { maxItems, highlight, marker, showScore } = setupConfig(config);
 
 	// first char filter
-	model = model.filter(item => item[0] == keyword[0]);
+	model = model.filter(item => {
+		// item's first char must be same with keyword's first char
+		if(item[0] != keyword[0])
+			return false;
+
+		// item's must contain all char in keyword
+		for(let kChar of keyword.split("")) {
+			if(item.indexOf(kChar) < 0)
+				return false;
+		}
+
+		return true;
+	});
 
 	//scoring
 	model = model.map(item => {
+		let text = item;
 		const matchKeys = item.match(createRegeExp(keyword));
 
 		const score = !matchKeys ? 0 : matchKeys.reduce((sum, mItem) => sum + Math.pow(mItem.length, mItem.length), 0);
@@ -41,14 +54,21 @@ const searchAlgorithm = (keyword, model, config = {}) => {
 				const replacer = mItem.replace(mItem, marker.replace(valueMarker, mItem));
 				return { key, replacer };
 			})
-			.forEach(mItem => item = item.replace(mItem.key, mItem.replacer));
+			.forEach(mItem => text = text.replace(mItem.key, mItem.replacer));
 
-		return { value: item, score };
+		return { value: item, text, score };
 	});
 
 	// order value based on smaller score and limit as maxItems
 	model = model.sort((a, b) => b.score - a.score).slice(0, maxItems);
-	return !showScore ? model.map(item => item.value) : model;
+	
+	if(showScore)
+		return model;
+	
+	return model.map(item => {
+		const { value, text } = item;
+		return { value, text };
+	});
 };
 
 export default searchAlgorithm;
