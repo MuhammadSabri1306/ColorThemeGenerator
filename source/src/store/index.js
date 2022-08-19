@@ -1,4 +1,5 @@
 import { createStore, createLogger } from "vuex";
+import tailwindPalette from "./data/tailwindPalette";
 
 import getters from "./getters";
 import mutations from "./mutations";
@@ -8,7 +9,8 @@ import colorPicker from "./modules/colorPicker";
 export default createStore({
 	state: {
 		colors: {},
-		hasChanged: false
+		hasChanged: false,
+		tailwindPalette
 	},
 	getters,
 	mutations,

@@ -1,6 +1,3 @@
-import tailwindPalette from "./data/tailwindPalette";
-import searchAlgorithm from "./lib/searchAlgorithm";
-
 const objToArr = obj => {
 	return Object.entries(obj).map(([key, val]) => {
 		return { key, val };
@@ -8,9 +5,6 @@ const objToArr = obj => {
 };
 
 export default {
-	searchTailwindName(){
-		return searchKey => searchAlgorithm(searchKey, tailwindPalette);
-	},
 	format(state){
 		const colors = {
 			...state.colors.base.node,

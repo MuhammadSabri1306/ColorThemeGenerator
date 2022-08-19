@@ -26,7 +26,7 @@ const getType = () => {
 const changeType = () => typeIndex.value += (typeIndex.value == type.length - 1) ? -(typeIndex.value) : 1;
 
 const hexChange = e => {
-	const hex = e.target.value;
+	let hex = e.target.value;
 
 	if(hex[0] != "#")
 		hex = "#" + hex;
