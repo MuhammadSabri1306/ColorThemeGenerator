@@ -1,18 +1,15 @@
 <script setup>
-import { ref, computed, nextTick } from "vue";
+import { ref, computed } from "vue";
 import searchAlgorithm from "../modules/searchAlgorithm";
 import { ChevronRightIcon } from "@heroicons/vue/solid";
 import ColorViewCircle from "../ui/ColorViewCircle.vue";
 
 const props = defineProps({ model: Array });
 const emit = defineEmits(["cancel", "change"]);
-const keyword = ref("");
-const showSuggestions = ref(true);
 const searchConfig = { highlight: true, marker: "<b>{value}</b>" };
 
-const searchField = ref(null);
-defineExpose({ searchField });
-
+const keyword = ref("");
+const showSuggestions = ref(true);
 const suggestingColor = computed(() => keyword.value.search(/([0-9])|(-)/) >= 0);
 
 const getSuggestionClass = index => {
@@ -68,10 +65,11 @@ const navigatedIndex = {
 	}
 };
 
-const navigate = async (event) => {
-	// console.log(event.key);
-	if(event.key == "Escape")
-		return emit("cancel");
+const navigate = event => {
+	if(!showSuggestions.value){
+		showSuggestions.value = true;
+		return;
+	}
 	if(event.key == "ArrowUp")
 		return navigatedIndex.stepDown();
 	if(event.key == "ArrowDown")
@@ -88,6 +86,7 @@ const navigate = async (event) => {
 	if(event.key == "Enter" && navigatedIndex.onSuggestions() && suggestingColor.value){
 		const { name, color } = suggestions.value[navigatedIndex.ref.value];
 		keyword.value = name;
+		showSuggestions.value = false;
 		return emit("change", { name, color });
 	}
 };
@@ -95,10 +94,10 @@ const navigate = async (event) => {
 <template>
 	<div>
 		<div class="grid grid-cols-1 mb-4 px-8">
-			<input ref="searchField" v-model="keyword" @keydown="navigate" @focus="showSuggestions = true" @blur="showSuggestions = false" type="text" class="border rounded-md border-gray-300 px-4 py-1 text-gray-900 focus:border-gray-400 focus:outline-none" placeholder="Search Tailwind's color">
+			<input v-model="keyword" data-tabindex="0" @keydown="navigate" @focus="showSuggestions = true" @blur="showSuggestions = false" type="text" class="border rounded-md border-gray-300 px-4 py-1 text-gray-900 focus:border-gray-400 focus:outline-none" placeholder="Search Tailwind's color">
 		</div>
 		<div class="flex flex-col items-stretch" :class="hideSuggestionsClass">
-			<button v-for="(twColor, index) in suggestions" :class="getSuggestionClass(index)" type="button" class="flex justify-between items-center border-x lg:border-r-0 border-gray-200 px-8 py-1">
+			<button v-for="(twColor, index) in suggestions" :class="getSuggestionClass(index)" type="button" class="flex justify-between items-center border-x lg:border-r-0 border-gray-200 px-8 py-1" tabindex="-1">
 				<span v-html="twColor.text" class="text-gray-500 text-sm font-semibold suggestion"></span>
 				<ChevronRightIcon v-if="!suggestingColor" class="w-6 h-6 m-1 text-gray-500" />
 				<ColorViewCircle v-else :color="twColor.color" :circleClassList="['w-8', 'h-8']" />

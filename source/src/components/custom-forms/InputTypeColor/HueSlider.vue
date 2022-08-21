@@ -20,7 +20,10 @@ onBeforeMount(() => hue.value = props.hue);
 
 const isSlide = ref(false);
 const startSlide = () => isSlide.value = true;
-const endSlide = () => isSlide.value = false;
+const endSlide = event => {
+	isSlide.value = false;
+	emit("change", event.target.value);
+};
 const slide = event => {
 	if(!isSlide.value)
 		return;
@@ -33,7 +36,7 @@ document.body.addEventListener("touchmove", slide);
 </script>
 <template>
 	<div class="flex items-center">
-		<input @mousedown="startSlide" @change="endSlide" type="range" name="hueRange" min="0" max="360" :value="hue" class="appearance-none h-4 rounded-[1rem] grow cursor-pointer focus:outline-none" :style="styleBg()">
+		<input data-tabindex="0" @mousedown="startSlide" @change="endSlide" type="range" name="hueRange" min="0" max="360" :value="hue" class="appearance-none h-4 rounded-[1rem] grow cursor-pointer focus:outline-none" :style="styleBg()">
 		<span class="w-10 text-right text-gray-600">{{ hue }}</span>
 	</div>
 </template>

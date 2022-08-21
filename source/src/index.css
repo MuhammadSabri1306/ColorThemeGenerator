@@ -16,6 +16,18 @@
 		@apply mx-auto px-8;
 	}
 
+	.focus-ring-default {
+		@apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+	}
+
+	.focus-shadow-default {
+		@apply focus:shadow-[0_0_0.25rem] focus:shadow-indigo-600 focus:outline-none;
+	}
+
+	.focus-color-default {
+		@apply focus:text-indigo-600 focus:outline-none;
+	}
+
 	.btn-navigation {
 		@apply md:inline-flex md:items-center whitespace-nowrap px-4 pt-3 pb-2 md:pb-3;
 	}
