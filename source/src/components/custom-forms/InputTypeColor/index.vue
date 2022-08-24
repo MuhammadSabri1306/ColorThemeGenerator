@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onBeforeMount } from "vue";
-import W3Color from "../../../store/lib/W3Color";
+import W3Color from "../../modules/W3Color";
 import Picker from "./Picker.vue";
 import HueSlider from "./HueSlider.vue";
 import TextInput from "./TextInput.vue";

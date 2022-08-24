@@ -1,4 +1,4 @@
-import W3Color from "./../../lib/W3Color";
+import W3Color from "../../../components/modules/W3Color";
 
 export default {
 	setDefault(state, { type, val }){
