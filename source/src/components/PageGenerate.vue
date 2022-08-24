@@ -1,6 +1,7 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useStore } from "vuex";
+import { getBuildTheme } from "./modules/applyThemeSuggestions";
 
 import Navigation from "./Navigation.vue";
 import SectionColor from "./SectionColor.vue";
@@ -11,7 +12,35 @@ import { ColorSwatchIcon } from "@heroicons/vue/solid";
 
 const store = useStore();
 const colors = computed(() => store.colors);
-store.commit("setupColors");
+const paletteSuggestion = computed(() => store.state.paletteSuggestion);
+
+const applyPaletteSuggestions = () => {
+	const themeId = new URL(document.location.href).searchParams.get("themeid");
+	if(!themeId)
+		return;
+
+	const suggestionsTheme = paletteSuggestion.value.find(item => item.id == themeId);
+	if(!suggestionsTheme)
+		return;
+
+	const theme = getBuildTheme(suggestionsTheme);
+	["black", "white"].forEach(key => theme[key] && store.commit("updateBaseColor", { key, val: theme[key] }));
+	["dark", "light"].forEach(name => theme[name] && store.commit("updateBaseColor", { name, val: theme[name] }));
+
+	for(let key in theme.primary){
+		store.commit("updatePaletteColor", { name: "primary", key, val: theme.primary[key] });
+	}
+
+	for(let name in theme.others){
+		store.commit("updatePaletteColor", { name });
+		for(let key in theme.others[name]){
+			store.commit("updatePaletteColor", { name, key, val: theme.others[name][key] });
+		}
+	}
+};
+
+// watch(() => store.state.paletteSuggestion, paletteSuggestion => applyPaletteSuggestions(paletteSuggestion));
+applyPaletteSuggestions();
 
 const activeSection = ref(1);
 const formConfirm = ref(null);

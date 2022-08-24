@@ -1,8 +1,13 @@
 <script setup>
 import { ref, computed } from "vue";
+import { useStore } from "vuex";
 import PageHome from "./components/PageHome.vue";
 import PageGenerate from "./components/PageGenerate.vue";
 import IconSocial from "./components/IconLoader.vue";
+
+const store = useStore();
+store.dispatch("fetchPaletteSuggestions");
+store.commit("setupColors");
 
 const currentUrlHash = ref(window.location.hash);
 
@@ -11,7 +16,8 @@ window.addEventListener("hashchange", () => {
 });
 
 const showPage = computed(() => {
-	return currentUrlHash.value == "#generate" ? "generate" : "home";
+	const hashGenerate = currentUrlHash.value.search("generate");
+	return (hashGenerate >= 0 && hashGenerate < 2) ? "generate" : "home";
 });
 </script>
 <template>

@@ -26,7 +26,8 @@ export default {
 			this.$store.commit("updateBaseColor", { key, val });
 		},
 		setHalfColor({ name, key, val }){
-			this.$store.commit("updateHalfColor", { name, key, val });
+			console.log(key);
+			this.$store.commit("updateHalfColor", { name, val });
 		},
 		setPrimaryColorNode({ key, val }){
 			this.$store.commit("updatePaletteColor", { name: "primary", key, val });

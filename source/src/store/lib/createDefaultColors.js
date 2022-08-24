@@ -10,6 +10,7 @@ const createDefaultColors = defaultPalette => {
 		light = halfColors.light,
 		primary = generateColors(dPalette.primary),
 		others = {};
+
 	return { base, dark, light, primary, others };
 };
 

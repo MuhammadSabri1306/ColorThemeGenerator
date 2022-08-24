@@ -15,7 +15,7 @@ export default {
 		state.colors.base.node[key] = val;
 		if(!state.hasChanged) state.hasChanged = true;
 	},
-	updateHalfColor(state, { name, key, val }){
+	updateHalfColor(state, { name, val }){
 		if(["light", "dark"].indexOf(name) < 0)
 			return;
 
@@ -63,5 +63,8 @@ export default {
 	deleteOthersColor(state, name){
 		delete state.colors.others[name];
 		if(!state.hasChanged) state.hasChanged = true;
+	},
+	pushPaletteSuggestions(state, palette){
+		state.paletteSuggestion.push(palette);
 	}
 };

@@ -2,7 +2,7 @@ const newColorName = availabledNames => {
 	const defaultName = "secondary",
 		numberedName = "untitled";
 
-	if(availabledNames.length < 1)
+	if(availabledNames.length < 1 || availabledNames.indexOf(defaultName) < 0)
 		return defaultName;
 
 	const regx = new RegExp(`^(${ numberedName })`, "g");
