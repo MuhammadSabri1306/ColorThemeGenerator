@@ -3,7 +3,7 @@ import offlinePaletteSuggestions from "./data/offlinePaletteSuggestions";
 
 export default {
 	fetchPaletteSuggestions({ commit }){
-		const isOffline = true;/*!navigator.onLine*/
+		const isOffline = !navigator.onLine;
 		if(isOffline){
 			offlinePaletteSuggestions.forEach(item => commit("pushPaletteSuggestions", item));
 			return;

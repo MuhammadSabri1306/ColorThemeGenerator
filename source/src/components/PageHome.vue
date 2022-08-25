@@ -35,7 +35,6 @@ onMounted(() => {
 
 onUnmounted(() => window.removeEventListener("scroll", heroOnScroll));
 </script>
-
 <style scoped>
 .hero-wrapper { aspect-ratio: 2 / 1; }
 
