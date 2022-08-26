@@ -47,10 +47,6 @@ export default {
 			return;
 		}
 
-		if(name == "primary"){
-			console.log(key, val);
-		}
-
 		// delete color
 		if(!key && !val){
 			state.colors.theme = state.colors.theme.filter(color => color.name != name);

@@ -55,9 +55,6 @@ const applyPaletteSuggestions = themeId => {
 
 		for(let key in theme.theme[name]){
 			const val = theme.theme[name][key];
-			if(name == "primary"){
-				console.log(theme.theme[name]);
-			}
 			store.commit("updateThemeColor", { name, key, val });
 		}
 	}
