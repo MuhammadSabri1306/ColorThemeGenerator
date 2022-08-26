@@ -47,17 +47,18 @@ const applyPaletteSuggestions = themeId => {
 		return;
 
 	const theme = getBuildTheme(suggestionsTheme);
-	["black", "white"].forEach(key => theme[key] && store.commit("updateBaseColor", { key, val: theme[key] }));
-	["dark", "light"].forEach(name => theme[name] && store.commit("updateBaseColor", { name, val: theme[name] }));
+	["black", "white", "dark", "light"].forEach(name => theme[name] && store.commit("updateBaseColor", { name, val: theme[name] }));
 
-	for(let key in theme.primary){
-		store.commit("updatePaletteColor", { name: "primary", key, val: theme.primary[key] });
-	}
+	for(let name in theme.theme){
+		if(store.state.colors.theme.findIndex(item => item.name == name) < 0)
+			store.commit("updateThemeColor", { name });
 
-	for(let name in theme.others){
-		store.commit("updatePaletteColor", { name });
-		for(let key in theme.others[name]){
-			store.commit("updatePaletteColor", { name, key, val: theme.others[name][key] });
+		for(let key in theme.theme[name]){
+			const val = theme.theme[name][key];
+			if(name == "primary"){
+				console.log(theme.theme[name]);
+			}
+			store.commit("updateThemeColor", { name, key, val });
 		}
 	}
 };

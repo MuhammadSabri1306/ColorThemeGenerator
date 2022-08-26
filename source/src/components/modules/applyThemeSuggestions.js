@@ -97,7 +97,7 @@ const getBuildTheme = selectedTheme => {
 	if(selectedTheme && !selectedTheme.color)
 		return;
 
-	const theme = { others: {} };
+	const theme = { theme: {} };
 	selectedTheme.color.forEach(([r, g, b]) => {
 		const w3Color = new W3Color("rgb", [r, g, b]);
 		const { l } = w3Color.toHsl();
@@ -111,13 +111,13 @@ const getBuildTheme = selectedTheme => {
 			return;
 		}
 
-		if(!theme.primary){
-			theme.primary = createColorNode(themeRangesKey, w3Color.toHexString());
+		if(!theme.theme.primary){
+			theme.theme.primary = createColorNode(themeRangesKey, w3Color.toHexString());
 			return;
 		}
 
-		const newName = newColorName([...Object.keys(theme.others), "primary"]);
-		theme.others[newName] = createColorNode(themeRangesKey, w3Color.toHexString());
+		const newName = newColorName([...Object.keys(theme.theme), "primary"]);
+		theme.theme[newName] = createColorNode(themeRangesKey, w3Color.toHexString());
 	});
 
 	return theme;

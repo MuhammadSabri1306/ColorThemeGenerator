@@ -5,16 +5,20 @@ const objToArr = obj => {
 };
 
 export default {
+	registeredColorsName(state){
+		return ["black", "white", "dark", "light", ...state.colors.theme.map(item => item.name)];
+	},
 	format(state){
+		const { black, white, dark, light, theme } = state.colors;
 		const colors = {
-			...state.colors.base.node,
-			dark: { ...state.colors.dark.values },
-			light: { ...state.colors.light.values },
-			primary: { ...state.colors.primary.values },
+			black,
+			light,
+			dark: { ...dark.values },
+			light: { ...light.values }
 		};
 
-		Object.keys(state.colors.others).forEach(name => {
-			colors[name] = { ...state.colors.others[name].values };
+		theme.forEach(colorTheme => {
+			colors[colorTheme.name] = { ...colorTheme.values };
 		});
 
 		return colors;

@@ -10,7 +10,6 @@ import FormConfirm from "./FormConfirm.vue";
 import { ColorSwatchIcon } from "@heroicons/vue/solid";
 
 const store = useStore();
-const colors = computed(() => store.colors);
 const paletteSuggestion = computed(() => store.state.paletteSuggestion);
 
 const activeSection = ref(1);

@@ -3,15 +3,14 @@ import generateColors from "./generateColors";
 
 const createDefaultColors = defaultPalette => {
 	const dPalette = JSON.parse(JSON.stringify(defaultPalette));
-	const halfColors = generateHalfColors(dPalette.half.light, dPalette.half.dark);
+	const { black, white } = dPalette;
+	const { light, dark } = generateHalfColors(dPalette.light, dPalette.dark);
+	const theme = Object.entries(dPalette.theme).map(([name, nodes]) => {
+		const { node, values } = generateColors(nodes);
+		return { name, node, values };
+	});
 
-	const base = { node: dPalette.base },
-		dark = halfColors.dark,
-		light = halfColors.light,
-		primary = generateColors(dPalette.primary),
-		others = {};
-
-	return { base, dark, light, primary, others };
+	return { black, white, dark, light, theme };
 };
 
 export default createDefaultColors;

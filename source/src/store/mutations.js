@@ -8,61 +8,68 @@ export default {
 		state.colors = createDefaultColors(defaultPalette);
 		state.hasChanged = false;
 	},
-	updateBaseColor(state, { key, val }){
-		if(["black", "white"].indexOf(key) < 0)
+	updateBaseColor(state, { name, val }){
+		const baseColorName = ["black", "white", "dark", "light"];
+		if(baseColorName.indexOf(name) < 0)
 			return;
 
-		state.colors.base.node[key] = val;
-		if(!state.hasChanged) state.hasChanged = true;
-	},
-	updateHalfColor(state, { name, val }){
-		if(["light", "dark"].indexOf(name) < 0)
+		// Black and White
+		if(baseColorName.slice(0, 2).indexOf(name) >= 0){
+			state.colors[name] = val;
+			if(!state.hasChanged)
+				state.hasChanged = true;
 			return;
+		}
 
+		// Dark and Light
 		const prevColors = {
 			light: state.colors.light.node[100],
 			dark: state.colors.dark.node[900]
 		};
+
 		prevColors[name] = val;
+		const { light, dark } = generateHalfColors(prevColors.light, prevColors.dark);
+		state.colors.light = light;
+		state.colors.dark = dark;
 
-		const halfColors = generateHalfColors(prevColors.light, prevColors.dark);
-		state.colors.light = halfColors.light;
-		state.colors.dark = halfColors.dark;
-		if(!state.hasChanged) state.hasChanged = true;
+		if(!state.hasChanged)
+			state.hasChanged = true;
 	},
-	updatePaletteColor(state, { name, key, val }){
-		if(!name) return;
-		const route = {
-			newOthersColor: name != "primary" && !key && !val,
-			setPrimaryNode: name == "primary" && key && val,
-			setOthersNode: name != "primary" && key && val,
-			delPrimaryNode: name == "primary" && key && !val,
-			delOthersNode: name != "primary" && key && !val
-		};
+	updateThemeColor(state, { name, key, val }){
+		if(!name)
+			return;
 
-		const [action] = Object.entries(route).find(([ action, condition ]) => condition);
-		if(!action) return;
-
-		if(action === "newOthersColor"){
-			state.colors.others[name] = generateColors();
+		// generate new color
+		const targetColorIndex = state.colors.theme.findIndex(color => color.name === name);
+		if(targetColorIndex < 0){
+			const { node, values } = generateColors();
+			state.colors.theme.push({ name, node, values });
 			return;
 		}
 
-		const nodes = name != "primary" ? state.colors.others[name].node : state.colors.primary.node;
-		if(action === "setPrimaryNode" || action === "setOthersNode")
-			nodes[key] = val;
-		else if(action === "delPrimaryNode" || action === "delOthersNode")
-			delete nodes[key];
+		if(name == "primary"){
+			console.log(key, val);
+		}
 
-		if(action === "setPrimaryNode" || action === "delPrimaryNode")
-			state.colors.primary = generateColors(nodes);
-		else if(action === "setOthersNode" || action === "delOthersNode")
-			state.colors.others[name] = generateColors(nodes);	
-		if(!state.hasChanged) state.hasChanged = true;
+		// delete color
+		if(!key && !val){
+			state.colors.theme = state.colors.theme.filter(color => color.name != name);
+			return;
+		}
+
+		const nodes = state.colors.theme[targetColorIndex].node;
+		if(key && !val) // delete color node
+			delete nodes[key];
+		else if(key && val) // set color node
+			nodes[key] = val;
+		const { node, values } = generateColors(nodes);
+		state.colors.theme[targetColorIndex].node = node;
+		state.colors.theme[targetColorIndex].values = values;
 	},
-	deleteOthersColor(state, name){
-		delete state.colors.others[name];
-		if(!state.hasChanged) state.hasChanged = true;
+	updateThemeColorName(state, { oldName, newName }){
+		const targetColorIndex = state.colors.theme.findIndex(color => color.name === oldName);
+		if(targetColorIndex >= 0)
+			state.colors.theme[targetColorIndex].name = newName;
 	},
 	pushPaletteSuggestions(state, palette){
 		state.paletteSuggestion.push(palette);

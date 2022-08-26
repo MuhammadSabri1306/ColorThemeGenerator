@@ -1,88 +1,74 @@
-<script>
+<script setup>
+import { ref, computed, watch } from "vue";
 import { LockClosedIcon, LockOpenIcon, MinusCircleIcon } from "@heroicons/vue/solid";
 import { TrashIcon } from "@heroicons/vue/outline";
 import ButtonChangeColor from "./ButtonChangeColor.vue";
 import ColorViewCircle from "./ui/ColorViewCircle.vue";
 import ButtonAddColor from "./ButtonAddColor.vue";
 
-export default {
-	components: {
-		LockClosedIcon,
-		LockOpenIcon,
-		MinusCircleIcon,
-		TrashIcon,
-		ButtonChangeColor,
-		ColorViewCircle,
-		ButtonAddColor
-	},
-	props: {
-		title: String,
-		lock: Boolean,
-		name: String,
-		color: Object,
-		customizable: Boolean,
-		destroyable: Boolean,
-		editTitle: Boolean
-	},
-	emits: ["setColor", "removeColor", 'destroy'],
-	data(){
-		return {
-			isLocked: false
-		};
-	},
-	computed: {
-		colorCustom(){
-			return this.color.node;
-		},
-		colorRange(){
-			return this.color.values;
-		},
-		availableKey(){
-			return Object.keys(this.color.node);
-		},
-		canUseAdd(){
-			return this.customizable && Object.keys(this.colorCustom).length < 9;
-		},
-		canUseRemove(){
-			return this.customizable && Object.keys(this.colorCustom).length > 1 ;
-		},
-		titleEditableClassList(){
-			if(!this.editTitle) return [];
-			return ["border-b", "border-transparent", "transition-colors", "duration-200", "ease-in-out", "hover:border-gray-400", "focus:border-gray-400", "focus:outline-none"];
-		}
-	},
-	created(){
-		this.initData();
-	},
-	methods: {
-		initData(){
-			this.isLocked = false;
-			this.isLocked = this.lock;
-		},
-		changeIsLocked(){
-			this.isLocked = !this.isLocked;
-		},
-		setColor(key, val){
-			const name = this.name;
-			this.$emit("setColor", { name, key, val });
-		},
-		removeColor(key){
-			const name = this.name;
-			this.$emit("removeColor", { name, key });
-		},
-		changeTitle(event){
-			const title = event.target.innerText;
-			console.log(title.replace(/[^a-z1-9]/gi, "").toLowerCase());
-		}
-	}
+const props = defineProps({
+	title: String,
+	lock: Boolean,
+	name: String,
+	color: Object,
+	customizable: Boolean,
+	destroyable: Boolean,
+	editTitle: Boolean
+});
+
+const color = ref(props.color);
+watch(() => props.color, c => color.value = c);
+
+const emit = defineEmits(["setColor", "removeColor", "destroy", "updateTitle"]);
+const isLocked = ref(false);
+if(props.lock)
+	isLocked.value = props.lock;
+
+const colorCustom = computed(() => color.value.node);
+const colorRange = computed(() => color.value.values);
+const availableKey = computed(() => Object.keys(color.value.node));
+const canUseAdd = computed(() => props.customizable && Object.keys(colorCustom.value).length < 9);
+const canUseRemove = computed(() => props.customizable && Object.keys(colorCustom.value).length > 1);
+const titleEditableClassList = computed(() => {
+	if(!props.editTitle)
+		return [];
+	return ["border-b", "border-transparent", "transition-colors", "duration-200", "ease-in-out", "hover:border-gray-400", "focus:border-gray-400", "focus:outline-none"];
+});
+
+const switchIsLocked = () => isLocked.value = !isLocked.value;
+const setColor = (key, val) => emit("setColor", { name: props.name, key, val });
+const removeColor = key => emit("removeColor", { name: props.name, key });
+
+const changeTitle = title => {
+	if(title.length < 1)
+		return false;
+	title = title.replace(/[^a-z1-9]/gi, "").toLowerCase();
+	emit("updateTitle", props.title.toLowerCase(), title);
+	return true;
+};
+
+const titleOnKeyDown = event => {
+	if(event.key != "Enter")
+		return;
+	event.preventDefault();
+
+	const title = event.target.innerText;
+	if(!changeTitle(title))
+		event.target.innerText = props.title;
+};
+
+const titleOnBlur = event => {
+	const title = event.target.innerText;
+	if(!changeTitle(title))
+		event.target.innerText = props.title;
 };
 </script>
 <template>
 	<div class="color-panel">
 		<div class="flex justify-between items-start mb-12">
 			<div class="flex items-center">
-				<h4 class="text-xl lg:text-lg truncate font-bold leading-6 text-gray-700" :class="titleEditableClassList" :contenteditable="editTitle" @input="changeTitle">{{ title }}</h4>
-				<button type="button" class="ml-3 transition-colors duration-200 ease-in-out hover:text-gray-600" :class="{ 'text-gray-500': isLocked, 'text-gray-400': !isLocked }" @click="changeIsLocked()">
+				<h4 class="text-xl lg:text-lg truncate font-bold leading-6 text-gray-700" :class="titleEditableClassList" :contenteditable="editTitle" @keydown="titleOnKeyDown" @blur="titleOnBlur">{{ title }}</h4>
+				<button type="button" class="ml-3 transition-colors duration-200 ease-in-out hover:text-gray-600" :class="{ 'text-gray-500': isLocked, 'text-gray-400': !isLocked }" @click="switchIsLocked">
 					<LockClosedIcon v-if="isLocked" class="w-4 h-4" />
 					<LockOpenIcon v-else class="w-4 h-4" />
 				</button>
