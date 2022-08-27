@@ -4,8 +4,14 @@ import offlinePaletteSuggestions from "./data/offlinePaletteSuggestions";
 export default {
 	fetchPaletteSuggestions({ commit }){
 		const isOffline = !navigator.onLine;
-		if(true){
+		if(isOffline){
 			offlinePaletteSuggestions.forEach(item => commit("pushPaletteSuggestions", item));
+			return;
+		}
+
+		const savedPaletteSuggestionsJSON = JSON.parse(window.sessionStorage.getItem("colorthemegenerator-palettesuggestions"));
+		if(savedPaletteSuggestionsJSON){
+			savedPaletteSuggestionsJSON.forEach(item => commit("pushPaletteSuggestions", item));
 			return;
 		}
 

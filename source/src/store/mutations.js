@@ -77,5 +77,10 @@ export default {
 	},
 	pushPaletteSuggestions(state, palette){
 		state.paletteSuggestion.push(palette);
+
+		if(state.paletteSuggestion.length == 10){
+			const paletteSuggestions = JSON.stringify(state.paletteSuggestion);
+			window.sessionStorage.setItem("colorthemegenerator-palettesuggestions", paletteSuggestions);
+		}
 	}
 };
