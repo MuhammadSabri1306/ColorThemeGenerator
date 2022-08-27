@@ -39,17 +39,24 @@ export default {
 		if(!name)
 			return;
 
+		const hasChanged = () => {
+			if(!state.hasChanged)
+				state.hasChanged = true;
+		};
+
 		// generate new color
 		const targetColorIndex = state.colors.theme.findIndex(color => color.name === name);
 		if(targetColorIndex < 0){
 			const { node, values } = generateColors();
 			state.colors.theme.push({ name, node, values });
+			hasChanged();
 			return;
 		}
 
 		// delete color
 		if(!key && !val){
 			state.colors.theme = state.colors.theme.filter(color => color.name != name);
+			hasChanged();
 			return;
 		}
 
@@ -61,6 +68,7 @@ export default {
 		const { node, values } = generateColors(nodes);
 		state.colors.theme[targetColorIndex].node = node;
 		state.colors.theme[targetColorIndex].values = values;
+		hasChanged();
 	},
 	updateThemeColorName(state, { oldName, newName }){
 		const targetColorIndex = state.colors.theme.findIndex(color => color.name === oldName);

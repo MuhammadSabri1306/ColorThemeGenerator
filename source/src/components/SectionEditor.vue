@@ -1,14 +1,18 @@
 <script setup>
 import { reactive, computed, nextTick } from "vue";
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 import newColorName from "./modules/newColorName";
+import { getBuildTheme } from "./modules/applyThemeSuggestions";
+
 import PanelColor from "./PanelColor.vue";
 import FixedModal from "./ui/FixedModal.vue";
 import { PlusIcon } from "@heroicons/vue/solid";
 
-const newColorModal = reactive({ value: "", show: false, valid: true });
 const store = useStore();
+const route = useRoute();
 
+const newColorModal = reactive({ value: "", show: false, valid: true });
 const colors = computed(() => store.state.colors);
 const registeredColorsName = computed(() => store.getters["registeredColorsName"]);
 
@@ -60,6 +64,28 @@ const openNewColorModal = () => {
 	newColorModal.value = newColorName(registeredColorsName.value);
 	newColorModal.show = true;
 };
+
+const applyPaletteSuggestions = themeId => {
+	const suggestionsTheme = store.state.paletteSuggestion.find(item => item.id == themeId);
+	if(!suggestionsTheme)
+		return;
+
+	const theme = getBuildTheme(suggestionsTheme);
+	["black", "white", "dark", "light"].forEach(name => theme[name] && store.commit("updateBaseColor", { name, val: theme[name] }));
+
+	for(let name in theme.theme){
+		if(store.state.colors.theme.findIndex(item => item.name == name) < 0)
+			store.commit("updateThemeColor", { name });
+
+		for(let key in theme.theme[name]){
+			const val = theme.theme[name][key];
+			store.commit("updateThemeColor", { name, key, val });
+		}
+	}
+};
+
+if(route.params.themeId)
+	applyPaletteSuggestions(route.params.themeId);
 </script>
 <template>
 	<section>

@@ -38,42 +38,18 @@ const suggestions = computed(() => {
 		return { id, color };
 	});
 });
-
-const createUrl = themeId => "?themeid=" + themeId + "#generate";
-
-const applyPaletteSuggestions = themeId => {
-	const suggestionsTheme = store.state.paletteSuggestion.find(item => item.id == themeId);
-	if(!suggestionsTheme)
-		return;
-
-	const theme = getBuildTheme(suggestionsTheme);
-	["black", "white", "dark", "light"].forEach(name => theme[name] && store.commit("updateBaseColor", { name, val: theme[name] }));
-
-	for(let name in theme.theme){
-		if(store.state.colors.theme.findIndex(item => item.name == name) < 0)
-			store.commit("updateThemeColor", { name });
-
-		for(let key in theme.theme[name]){
-			const val = theme.theme[name][key];
-			store.commit("updateThemeColor", { name, key, val });
-		}
-	}
-};
-
-// watch(() => store.state.paletteSuggestion, paletteSuggestion => applyPaletteSuggestions(paletteSuggestion));
-applyPaletteSuggestions();
 </script>
 <template>
 	<div>
 		<div v-if="suggestions.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-16">
-			<a v-for="item in suggestions" href="#generate" @click="applyPaletteSuggestions(item.id)" class="inline-flex flex-col items-stretch group bg-white hover:bg-indigo-700 border border-gray-300 hover:border-indigo-700 shadow hover:shadow-lg rounded-xl overflow-hidden transition-all duration-200 ease-in-out">
+			<router-link v-for="item in suggestions" :to="'/generate/editor/' + item.id" class="inline-flex flex-col items-stretch group bg-white hover:bg-indigo-700 border border-gray-300 hover:border-indigo-700 shadow hover:shadow-lg rounded-xl overflow-hidden transition-all duration-200 ease-in-out">
 				<div class="overflow-hidden w-full h-28 flex cursor-pointer">
 					<div v-for="color in item.color" class="basis-[1px] grow hover:basis-20 overflow-hidden flex transition-all duration-200 ease-in-out" :style="{ background: color.hex }">
 						<span :class="{ 'text-white': !color.isLight, 'text-gray-900': color.isLight }" class="block w-full text-center my-auto text-xs font-bold uppercase">{{ color.hex }}</span>
 					</div>
 				</div>
 				<span class="px-8 py-4 text-center text-sm font-semibold text-gray-500 group-hover:text-white focus:outline-none">Apply Palette Theme</span>
-			</a>
+			</router-link>
 		</div>
 	</div>
 </template>

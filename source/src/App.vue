@@ -1,49 +1,16 @@
 <script setup>
-import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import PageHome from "./components/PageHome.vue";
-import PageGenerate from "./components/PageGenerate.vue";
-import IconSocial from "./components/IconLoader.vue";
+import Navigation from "./views/Navigation.vue";
+import Footer from "./views/Footer.vue";
 
 const store = useStore();
 store.dispatch("fetchPaletteSuggestions");
 store.commit("setupColors");
-
-const currentUrlHash = ref(window.location.hash);
-
-window.addEventListener("hashchange", () => {
-	currentUrlHash.value = window.location.hash;
-});
-
-const showPage = computed(() => {
-	const hashGenerate = currentUrlHash.value.search("generate");
-	return (hashGenerate >= 0 && hashGenerate < 2) ? "generate" : "home";
-});
 </script>
 <template>
 <div class="bg-gray-100 min-h-screen">
-	<PageHome v-if="showPage == 'home'" />
-	<PageGenerate v-if="showPage == 'generate'" />
-	<footer class="bg-gray-900">
-		<div class="container">
-			<div class="flex flex-col md:flex-row justify-center md:justify-between items-center">
-				<p class="text-gray-300 text-center text-sm pt-16 md:pt-8 pb-8 px-12 md:px-0">&copy; Color Theme Generator by <a href="#" class="font-semibold text-gray-200 transition-colors duration-200 ease-in-out hover:text-indigo-500">Muhammad Sabri</a>. 2022</p>
-				<div class="flex justify-center items-center py-8">
-					<a href="mailto:muhammadsabri1306@gmail.com" class="social-link" target="_blank">
-						<IconSocial icon="SolidEnvelopeIcon" />
-					</a>
-					<a href="https://github.com/MuhammadSabri1306" class="social-link" target="_blank">
-						<IconSocial icon="solid-github-icon" />
-					</a>
-					<a href="https://www.linkedin.com/in/sabri-muhammad-3355061a3/" class="social-link" target="_blank">
-						<IconSocial icon="solid-linkedin-icon" />
-					</a>
-					<a href="https://www.instagram.com/initial.sa/" class="social-link" target="_blank">
-						<IconSocial icon="solid-instagram-icon" />
-					</a>
-				</div>
-			</div>
-		</div>
-	</footer>
+	<Navigation />
+	<router-view />
+	<Footer class="bg-gray-900" />
 </div>
 </template>
