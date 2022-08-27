@@ -1,9 +1,11 @@
 <script setup>
 import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { useStore } from "vuex";
 import { ColorSwatchIcon, ChevronDownIcon } from "@heroicons/vue/solid";
 import IconSocial from "./IconLoader.vue";
 import PanelPaletteSuggestions from "./PanelPaletteSuggestions.vue";
 
+const store = useStore();
 const heroWrapper = ref(null);
 const hero = ref(null);
 let heroDefaultHeight = 0;

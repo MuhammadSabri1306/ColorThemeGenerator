@@ -90,13 +90,18 @@ const navigate = event => {
 		return emit("change", { name, color });
 	}
 };
+
+const onInputSearchFocus = event => {
+	showSuggestions.value = true;
+	setTimeout(() => event.target.removeAttribute("readonly"), 500);
+};
 </script>
 <template>
 	<div>
 		<div class="grid grid-cols-1 mb-4 px-8">
-			<input v-model="keyword" data-tabindex="0" @keydown="navigate" @focus="showSuggestions = true" @blur="showSuggestions = false" type="text" class="border rounded-md border-gray-300 px-4 py-1 text-gray-900 focus:border-gray-400 focus:outline-none" placeholder="Search Tailwind's color">
+			<input v-model="keyword" data-tabindex="0" @keydown="navigate" @focus="onInputSearchFocus" @blur="showSuggestions = false" type="text" class="border rounded-md border-gray-300 px-4 py-1 text-gray-900 focus:border-gray-400 focus:outline-none" placeholder="Search Tailwind's color" autocomplete="new-password" readonly>
 		</div>
-		<div class="flex flex-col items-stretch" :class="hideSuggestionsClass">
+		<div class="flex flex-col items-stretch z-[9999]" :class="hideSuggestionsClass">
 			<button v-for="(twColor, index) in suggestions" :class="getSuggestionClass(index)" type="button" class="flex justify-between items-center border-x lg:border-r-0 border-gray-200 px-8 py-1" tabindex="-1">
 				<span v-html="twColor.text" class="text-gray-500 text-sm font-semibold suggestion"></span>
 				<ChevronRightIcon v-if="!suggestingColor" class="w-6 h-6 m-1 text-gray-500" />

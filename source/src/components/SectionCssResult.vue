@@ -12,8 +12,6 @@ const copyCode = () => {
 	const copyStatus = copyHtmlToClipboard(codeContent.value) ? 1 : 0;
 	codeEditor.value.setCopyStatus(copyStatus);
 };
-
-// console.log(store.getters.css);
 </script>
 <template>
 	<PanelCodeEditor ref="codeEditor" @copy=copyCode>

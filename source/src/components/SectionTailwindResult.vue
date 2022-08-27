@@ -1,24 +1,23 @@
-<script>
+<script setup>
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
 import PanelCodeEditor from "./PanelCodeEditor.vue";
 import copyHtmlToClipboard from "./modules/copyHtmlToClipboard";
 
-export default {
-	components: { PanelCodeEditor },
-	computed: {
-		base(){
-			const { black, white } = this.$store.getters.twResult;
-			return { black, white };
-		},
-		rangesColor(){
-			return this.$store.getters.twResult.ranges;
-		}
-	},
-	methods: {
-		copyCode(){
-			const copyStatus = copyHtmlToClipboard(this.$refs.codeContent) ? 1 : 0;
-			this.$refs.codeEditor.setCopyStatus(copyStatus);
-		}
-	}
+const store = useStore();
+const codeContent = ref(null);
+const codeEditor = ref(null);
+
+const base = computed(() => {
+	const { black, white } = store.getters.twResult;
+	return { black, white };
+});
+
+const rangesColor = computed(() => store.getters.twResult.ranges);
+
+const copyCode = () => {
+	const copyStatus = copyHtmlToClipboard(codeContent.value) ? 1 : 0;
+	codeEditor.value.setCopyStatus(copyStatus);
 };
 </script>
 <template>

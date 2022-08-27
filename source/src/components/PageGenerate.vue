@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
 import Navigation from "./Navigation.vue";
