@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "./views/Home.vue";
 
 export default createRouter({
-    history: createWebHistory(),
+    history: createWebHistory("/ColorThemeGenerator/"),
     routes: [
         { path: "/", component: Home },
         { path: "/generate/:p", component: () => import("./views/Generate.vue") },
