@@ -11,7 +11,8 @@ const route = useRoute();
 const store = useStore();
 
 const formConfirm = ref(null);
-const isHome = computed(() => route.path === "/");
+const isHomePage = computed(() => route.path === "/");
+const isGeneratePage = computed(() => route.path.search("/generate") === 0);
 const disableBtnNewTheme = computed(() => !store.state.hasChanged);
 
 const backToHome = () => {
@@ -27,8 +28,18 @@ const backToHome = () => {
 	formConfirm.value.confirm(message, "Back to Home").then(handler).catch(() => null);
 };
 
+const newTheme = () => {
+	const message = "Your generated theme will be <span class='font-bold'>deleted!</span> Continue?";
+	formConfirm.value.confirm(message, "New Theme")
+		.then(() => {
+			store.commit("setupColors");
+			router.push({ path: "/generate/editor" });
+		})
+		.catch(() => null);
+};
+
 const activeClass = sectionName => {
-	if(isHome.value)
+	if(!isGeneratePage.value)
 		return;
 
 	const getClassList = isActive => isActive ? ["active"] : ["text-gray-600", "hover:text-gray-800"];
@@ -40,7 +51,7 @@ const activeClass = sectionName => {
 };
 </script>
 <template>
-	<div v-if="isHome">
+	<div v-if="isHomePage">
 		<header id="home" class="pt-6 md:pt-10">
 			<div class="container">
 				<div class="lg:flex lg:items-center lg:justify-between">
@@ -69,7 +80,7 @@ const activeClass = sectionName => {
 			</div>
 		</header>
 	</div>
-	<div v-else >
+	<div v-else-if="isGeneratePage" >
 		<header class="bg-white border-b md:border-b-0 border-gray-300">
 			<div class="container flex pt-6 md:pt-10 pb-3 md:pb-10">
 				<a href="/" @click.prevent="backToHome" class="flex justify-center items-end mx-auto">
