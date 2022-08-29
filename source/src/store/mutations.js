@@ -82,5 +82,9 @@ export default {
 			const paletteSuggestions = JSON.stringify(state.paletteSuggestion);
 			window.sessionStorage.setItem("colorthemegenerator-palettesuggestions", paletteSuggestions);
 		}
+	},
+	setShowLoadAnimation(state, val){
+		if(state.showLoadAnimation !== val)
+			state.showLoadAnimation = val;
 	}
 };

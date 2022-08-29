@@ -12,7 +12,8 @@ export default createStore({
 		colors: {},
 		hasChanged: false,
 		tailwindPalette,
-		paletteSuggestion: []
+		paletteSuggestion: [],
+		showLoadAnimation: true
 	},
 	getters,
 	mutations,

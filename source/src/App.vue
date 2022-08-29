@@ -1,7 +1,8 @@
 <script setup>
 import { useStore } from "vuex";
-import Navigation from "./views/Navigation.vue";
-import Footer from "./views/Footer.vue";
+import Navigation from "./layouts/Navigation.vue";
+import Footer from "./layouts/Footer.vue";
+import LoadAnimation from "./layouts/LoadAnimation.vue";
 
 const store = useStore();
 store.dispatch("fetchPaletteSuggestions");
@@ -13,4 +14,5 @@ store.commit("setupColors");
 	<router-view />
 	<Footer class="bg-gray-900" />
 </div>
+<LoadAnimation />
 </template>
