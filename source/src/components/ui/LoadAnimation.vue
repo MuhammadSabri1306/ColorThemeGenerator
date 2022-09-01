@@ -6,6 +6,7 @@ const store = useStore();
 const isShow = computed(() => store.state.showLoadAnimation);
 </script>
 <template>
+	<main ref="mainElm" v-bind="$attrs"></main>
 	<Transition name="loader" :duration="{ enter: 0, leave: 300 }">
 		<div v-if="isShow" class="fixed left-0 top-0 w-screen h-screen z-[9999] flex justify-center items-center z-[9999]">
 			<div class="animation-bg w-full h-full bg-indigo-700"></div>

@@ -1,8 +1,8 @@
 <script setup>
 import { useStore } from "vuex";
-import Navigation from "./layouts/Navigation.vue";
-import Footer from "./layouts/Footer.vue";
-import LoadAnimation from "./layouts/LoadAnimation.vue";
+import Navigation from "./components/Navigation.vue";
+import Footer from "./components/Footer.vue";
+import LoadAnimation from "./components/ui/LoadAnimation.vue";
 
 const store = useStore();
 store.dispatch("fetchPaletteSuggestions");

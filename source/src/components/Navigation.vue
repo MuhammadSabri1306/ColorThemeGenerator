@@ -92,7 +92,7 @@ const activeClass = sectionName => {
 		<nav class="sticky w-full left-0 top-0 bg-white border-b border-gray-300 overflow-hidden z-[6666]">
 			<div class="md:container flex flex-1 overflow-x-auto overflow-y-hidden justify-center md:justify-start">
 				<div class="flex items-end -mb-px">
-					<button class="btn-navigation text-gray-600 hover:text-gray-800" :disabled="disableBtnNewTheme" @click="$emit('navigate', 0)">
+					<button class="btn-navigation text-gray-600 hover:text-gray-800" :disabled="disableBtnNewTheme" @click="newTheme">
 						<ColorSwatchIcon class="icon" />
 						<span class="inline-block font-semibold text-sm">New Theme</span>
 					</button>
