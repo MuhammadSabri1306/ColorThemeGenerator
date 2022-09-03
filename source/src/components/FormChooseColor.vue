@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onBeforeMount, onMounted } from "vue";
 import { useStore } from "vuex";
+import tailwindPaletteList from "@/data/tailwindPalette.js";
 import customTabIndex from "@/modules/customTabIndex";
 
 import FixedModal from "./ui/FixedModal.vue";
@@ -36,10 +37,8 @@ onBeforeMount(() => {
 	store.commit("colorPicker/setHex", defaultHexColor);
 });
 
-const tailwindPaletteList = store.state.tailwindPalette;
 const chooseTailwindColor = twColor => {
 	store.commit("colorPicker/setHex", twColor.color);
-	console.log(twColor.name);
 	selectedTwName.value = twColor.name;
 };
 
