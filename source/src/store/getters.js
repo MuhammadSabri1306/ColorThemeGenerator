@@ -10,6 +10,7 @@ export default {
 		const { black, white, dark, light, theme } = state.colors;
 		const colors = {
 			black,
+			white,
 			light,
 			dark: { ...dark.values },
 			light: { ...light.values }
