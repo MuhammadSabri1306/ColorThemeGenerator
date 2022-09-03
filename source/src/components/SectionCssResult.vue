@@ -1,22 +1,25 @@
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 import SyntaxViewer from "./ui/SyntaxViewer.vue";
-import copyHtmlToClipboard from "@/modules/copyHtmlToClipboard";
 
-const codeEditor = ref(null);
 const store = useStore();
-const rangesColor = computed(() => store.getters.css);
+const syntaxContent = computed(() => {
+	const css = store.getters.css;
+	const result = css.map(({ key, val }, index) => {
+			const tabIndent = 1;
+			const content = `<span class="red">--${ key }</span>: <span class="yellow">${ val }</span>;` + (index < css.length - 1 ? "\n" : "");
 
-const copyCode = () => {
-	const copyStatus = copyHtmlToClipboard(codeContent.value) ? 1 : 0;
-	codeEditor.value.setCopyStatus(copyStatus);
-};
+			return { tabIndent, content };
+		});
+	result.unshift('<span class="red">:root</span> {')
+	result.push('}');
+
+	return result;
+});
+
+console.log(store.getters.twResult)
 </script>
 <template>
-	<SyntaxViewer ref="codeEditor" @copy=copyCode>
-<pre ref="codeContent"><span class="red">:root</span> {
-<span v-for="(item, index) in rangesColor">  <span class="red">--{{ item.key }}</span>: <span class="yellow">{{ item.val }}</span>;<br v-if="index < (rangesColor.length - 1)"></span>
-}</pre>
-	</SyntaxViewer>	
+	<SyntaxViewer :lineContent="syntaxContent" :tabSize="4" />
 </template>
