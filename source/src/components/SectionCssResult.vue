@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import PanelCodeEditor from "./PanelCodeEditor.vue";
+import SyntaxViewer from "./ui/SyntaxViewer.vue";
 import copyHtmlToClipboard from "@/modules/copyHtmlToClipboard";
 
 const codeEditor = ref(null);
@@ -14,9 +14,9 @@ const copyCode = () => {
 };
 </script>
 <template>
-	<PanelCodeEditor ref="codeEditor" @copy=copyCode>
+	<SyntaxViewer ref="codeEditor" @copy=copyCode>
 <pre ref="codeContent"><span class="red">:root</span> {
 <span v-for="(item, index) in rangesColor">  <span class="red">--{{ item.key }}</span>: <span class="yellow">{{ item.val }}</span>;<br v-if="index < (rangesColor.length - 1)"></span>
 }</pre>
-	</PanelCodeEditor>	
+	</SyntaxViewer>	
 </template>

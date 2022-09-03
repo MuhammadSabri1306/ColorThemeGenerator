@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import PanelCodeEditor from "./PanelCodeEditor.vue";
+import SyntaxViewer from "./ui/SyntaxViewer.vue";
 import copyHtmlToClipboard from "@/modules/copyHtmlToClipboard";
 
 const store = useStore();
@@ -22,7 +22,7 @@ const copyCode = () => {
 </script>
 <template>
 	<section>
-		<PanelCodeEditor ref="codeEditor" @copy=copyCode>
+		<SyntaxViewer ref="codeEditor" @copy=copyCode>
 <pre ref="codeContent"><span class="comment">// tailwind.config.js</span>
 <span class="red">module</span>.exports = {
   content: [<span class="green">'./src/**/*.{html,js}'</span>],
@@ -39,6 +39,6 @@ const copyCode = () => {
   },
   plugins: []
 }</pre>
-		</PanelCodeEditor>
+		</SyntaxViewer>
 	</section>
 </template>
