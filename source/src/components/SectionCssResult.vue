@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import PanelCodeEditor from "./PanelCodeEditor.vue";
-import copyHtmlToClipboard from "./modules/copyHtmlToClipboard";
+import copyHtmlToClipboard from "@/modules/copyHtmlToClipboard";
 
 const codeEditor = ref(null);
 const store = useStore();

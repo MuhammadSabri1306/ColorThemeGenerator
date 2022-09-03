@@ -1,8 +1,6 @@
-const objToArr = obj => {
-	return Object.entries(obj).map(([key, val]) => {
-		return { key, val };
-	});
-};
+const objToArr = obj => Object.entries(obj).map(([key, val]) => {
+	return { key, val };
+});
 
 export default {
 	registeredColorsName(state){

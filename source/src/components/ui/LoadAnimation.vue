@@ -3,7 +3,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
-const isShow = computed(() => store.state.showLoadAnimation);
+const isShow = computed(() => store.state.loadAnimation.show);
 </script>
 <template>
 	<main ref="mainElm" v-bind="$attrs"></main>

@@ -1,5 +1,5 @@
 <script setup>
-import IconSocial from "../components/IconLoader.vue";
+import IconSocial from "./IconLoader.vue";
 </script>
 <template>
 	<footer>

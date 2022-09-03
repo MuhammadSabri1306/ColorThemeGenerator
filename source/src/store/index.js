@@ -1,24 +1,24 @@
 import { createStore, createLogger } from "vuex";
-import tailwindPalette from "./data/tailwindPalette";
+import tailwindPalette from "@/data/tailwindPalette";
 
 import getters from "./getters";
 import mutations from "./mutations";
-import actions from "./actions";
 
 import colorPicker from "./modules/colorPicker";
+import paletteSuggestions from "./modules/paletteSuggestions";
+import loadAnimation from "./modules/loadAnimation";
 
-export default createStore({
+const store = createStore({
 	state: {
 		colors: {},
 		hasChanged: false,
-		tailwindPalette,
-		paletteSuggestion: [],
-		showLoadAnimation: true
+		tailwindPalette
 	},
 	getters,
 	mutations,
-	actions,
-	modules: { colorPicker },
+	modules: { colorPicker, paletteSuggestions, loadAnimation },
 	plugins: process.env.NODE_ENV !== "production" ? [createLogger()] : [],
 	strict: process.env.NODE_ENV !== "production"
 });
+
+export default store;

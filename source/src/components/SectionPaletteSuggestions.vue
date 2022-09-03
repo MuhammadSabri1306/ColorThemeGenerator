@@ -1,8 +1,8 @@
 <script setup>
 import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
-import W3Color from "./modules/W3Color";
-import { getBuildTheme } from "./modules/applyThemeSuggestions";
+import W3Color from "@/modules/W3Color";
+import { getBuildTheme } from "@/modules/applyThemeSuggestions";
 
 const store = useStore();
 
@@ -26,7 +26,7 @@ const isLight = color => {
 };
 
 const suggestions = computed(() => {
-	const data = store.state.paletteSuggestion;
+	const data = store.state.paletteSuggestions.palette;
 	return data.map(({ id, color }) => {
 		color = color.map(rgb => {
 			return {

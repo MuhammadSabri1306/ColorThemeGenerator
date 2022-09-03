@@ -1,21 +1,20 @@
 export default {
 	hue(state){
-		return state.cpColor.toHsv().h;
+		return state.color.toHsv().h;
 	},
 	postX(state){
-		console.log(state.cpColor.toHsv().s);
-		return state.cpColor.toHsv().s;
+		return state.color.toHsv().s;
 	},
 	postY(state){
-		return 100 - state.cpColor.toHsv().v;
+		return 100 - state.color.toHsv().v;
 	},
 	post(state, getters){
 		return { x: getters.postX, y: getters.postY };
 	},
 	hex(state){
-		return state.cpColor.toHexString()
+		return state.color.toHexString()
 	},
 	rgb(state){
-		return state.cpColor.toRgb();
+		return state.color.toRgb();
 	}
 };

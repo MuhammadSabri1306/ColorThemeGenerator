@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from "vue";
-import searchAlgorithm from "../modules/searchAlgorithm";
+import searchAlgorithm from "@/modules/searchAlgorithm";
 import { ChevronRightIcon } from "@heroicons/vue/solid";
 import ColorViewCircle from "../ui/ColorViewCircle.vue";
 

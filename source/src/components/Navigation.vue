@@ -4,7 +4,7 @@ import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { AdjustmentsIcon, CodeIcon } from "@heroicons/vue/outline";
 import { ColorSwatchIcon, ChevronDownIcon } from "@heroicons/vue/solid";
-import FormConfirm from "../components/FormConfirm.vue";
+import FormConfirm from "./FormConfirm.vue";
 
 const router = useRouter();
 const route = useRoute();

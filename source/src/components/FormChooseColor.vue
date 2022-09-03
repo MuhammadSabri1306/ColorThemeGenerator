@@ -1,7 +1,7 @@
 <script setup>
-import { ref, computed, onBeforeMount, onMounted, onUnmounted } from "vue";
+import { ref, computed, onBeforeMount, onMounted } from "vue";
 import { useStore } from "vuex";
-import customTabIndex from "./modules/customTabIndex";
+import customTabIndex from "@/modules/customTabIndex";
 
 import FixedModal from "./ui/FixedModal.vue";
 import ColorViewCircle from "./ui/ColorViewCircle.vue";
@@ -12,7 +12,7 @@ const emit = defineEmits(["submit", "cancel"]);
 const props = defineProps({ defaultValue: String });
 const store = useStore();
 
-const selectedTwName = ref(null);
+const selectedTwName = ref("");
 
 const tabIndexOrder = ["input[type='text']"];
 const { customTabIndexRef } = customTabIndex("data-tabindex");
@@ -32,15 +32,14 @@ const value = computed(() => store.getters["colorPicker/hex"]);
 const valueText = computed(() => selectedTwName.value ? selectedTwName.value : store.getters["colorPicker/hex"]);
 
 onBeforeMount(() => {
-	store.commit("colorPicker/setDefault", {
-		type: "hex",
-		val: [props.defaultValue ? props.defaultValue : "#ff0000"]
-	});
+	const defaultHexColor = props.defaultValue ? props.defaultValue : "#ff0000";
+	store.commit("colorPicker/setHex", defaultHexColor);
 });
 
 const tailwindPaletteList = store.state.tailwindPalette;
 const chooseTailwindColor = twColor => {
 	store.commit("colorPicker/setHex", twColor.color);
+	console.log(twColor.name);
 	selectedTwName.value = twColor.name;
 };
 
@@ -54,10 +53,7 @@ const submit = () => {
 	if(val.length <= 0)
 		return;
 
-	store.commit("colorPicker/setDefault", {
-		type: "hex",
-		val: ["#ff0000"]
-	});
+	store.commit("colorPicker/setHex", "#ff0000");
 	emit("submit", val);
 };
 

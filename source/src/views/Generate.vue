@@ -3,10 +3,10 @@ import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRoute, onBeforeRouteLeave } from "vue-router";
 import { ColorSwatchIcon } from "@heroicons/vue/solid";
-import SectionEditor from "../components/SectionEditor.vue";
-import SectionTailwindResult from "../components/SectionTailwindResult.vue";
-import SectionCssResult from "../components/SectionCssResult.vue";
-import FormConfirm from "../components/FormConfirm.vue";
+import SectionEditor from "@/components/SectionEditor.vue";
+import SectionTailwindResult from "@/components/SectionTailwindResult.vue";
+import SectionCssResult from "@/components/SectionCssResult.vue";
+import FormConfirm from "@/components/FormConfirm.vue";
 
 const store = useStore();
 const paletteSuggestion = computed(() => store.state.paletteSuggestion);
@@ -25,8 +25,8 @@ onBeforeRouteLeave((to, from, next) => {
 });
 
 onMounted(() => {
-	if(store.state.showLoadAnimation)
-		store.commit("setShowLoadAnimation", false);
+	if(store.state.loadAnimation.show)
+		store.commit("loadAnimation/set", false);
 });
 </script>
 <template>

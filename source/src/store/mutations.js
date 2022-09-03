@@ -1,7 +1,7 @@
-import defaultPalette from "./data/palette";
-import createDefaultColors from "./lib/createDefaultColors";
-import generateHalfColors from "./lib/generateHalfColors";
-import generateColors from "./lib/generateColors";
+import defaultPalette from "@/data/palette";
+import createDefaultColors from "@/modules/createDefaultColors";
+import generateHalfColors from "@/modules/generateHalfColors";
+import generateColors from "@/modules/generateColors";
 
 export default {
 	setupColors(state){
@@ -74,17 +74,5 @@ export default {
 		const targetColorIndex = state.colors.theme.findIndex(color => color.name === oldName);
 		if(targetColorIndex >= 0)
 			state.colors.theme[targetColorIndex].name = newName;
-	},
-	pushPaletteSuggestions(state, palette){
-		state.paletteSuggestion.push(palette);
-
-		if(state.paletteSuggestion.length == 10){
-			const paletteSuggestions = JSON.stringify(state.paletteSuggestion);
-			window.sessionStorage.setItem("colorthemegenerator-palettesuggestions", paletteSuggestions);
-		}
-	},
-	setShowLoadAnimation(state, val){
-		if(state.showLoadAnimation !== val)
-			state.showLoadAnimation = val;
 	}
 };

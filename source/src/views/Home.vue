@@ -3,9 +3,9 @@ import { ref, onMounted } from "vue";
 import { useStore } from "vuex";
 import { onBeforeRouteLeave } from "vue-router";
 
-import SectionHero from "../components/SectionHero.vue";
-import IconSocial from "../components/IconLoader.vue";
-import SectionPaletteSuggestions from "../components/SectionPaletteSuggestions.vue";
+import SectionHero from "@/components/SectionHero.vue";
+import IconSocial from "@/components/IconLoader.vue";
+import SectionPaletteSuggestions from "@/components/SectionPaletteSuggestions.vue";
 
 const mainElm = ref(null);
 onBeforeRouteLeave((to, from, next) => {
@@ -15,8 +15,8 @@ onBeforeRouteLeave((to, from, next) => {
 
 const store = useStore();
 onMounted(() => {
-	if(store.state.showLoadAnimation)
-		store.commit("setShowLoadAnimation", false);
+	if(store.state.loadAnimation.show)
+		store.commit("loadAnimation/set", false);
 });
 </script>
 <template>

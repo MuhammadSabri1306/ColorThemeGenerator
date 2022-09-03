@@ -1,17 +1,17 @@
-import fetchRandomPalette from "./lib/fetchRandomPalette";
-import offlinePaletteSuggestions from "./data/offlinePaletteSuggestions";
+import fetchRandomPalette from "@/modules/fetchRandomPalette";
+import offlinePaletteSuggestions from "@/data/offlinePaletteSuggestions";
 
 export default {
-	fetchPaletteSuggestions({ commit }){
+	fetch({ commit }){
 		const isOffline = !navigator.onLine;
 		if(isOffline){
-			offlinePaletteSuggestions.forEach(item => commit("pushPaletteSuggestions", item));
+			offlinePaletteSuggestions.forEach(item => commit("push", item));
 			return;
 		}
 
 		const savedPaletteSuggestionsJSON = JSON.parse(window.sessionStorage.getItem("colorthemegenerator-palettesuggestions"));
 		if(savedPaletteSuggestionsJSON){
-			savedPaletteSuggestionsJSON.forEach(item => commit("pushPaletteSuggestions", item));
+			savedPaletteSuggestionsJSON.forEach(item => commit("push", item));
 			return;
 		}
 
@@ -19,7 +19,7 @@ export default {
 		for(let i=0; i<numOfSuggestions; i++){
 			fetchRandomPalette(result => {
 				const palette = { id: i, color: result };
-				commit("pushPaletteSuggestions", palette);
+				commit("push", palette);
 			});
 		}
 	}
