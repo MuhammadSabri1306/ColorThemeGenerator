@@ -2,6 +2,7 @@
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import SyntaxViewer from "./ui/SyntaxViewer.vue";
+import { buildTemplate, buildContent } from "@/modules/syntaxViewerTemplating";
 
 const store = useStore();
 
@@ -20,33 +21,6 @@ const template = `
 \tplugins: []
 }`;
 
-const buildTemplate = () => {
-	let [header, footer] = template.split("<--DIVIDER-->");
-
-	const toLine = template => template.split("\n")
-		.filter(item => item.length > 0)
-		.map(item => {
-			const tabArr = item.match(/\t/g);
-
-			const tabIndent = tabArr ? tabArr.length : 0,
-				content = item.replace(/\t/g, "");
-			return { tabIndent, content };
-		});
-
-	header = toLine(header);
-	footer = toLine(footer);
-	return { header, footer };
-};
-
-const buildContent = (key, val, useComma = true) => {
-	if(typeof key == "number")
-		key = `<span class="green">'${ key }'</span>`;
-	val = `<span class="green">'${ val }'</span>`;
-	const comma = useComma ? "," : "";
-
-	return  key + ": " + val + comma;
-};
-
 const syntaxContent = computed(() => {
 	const { black, white, ranges } = store.getters.twResult;
 	const result = [];
@@ -64,7 +38,7 @@ const syntaxContent = computed(() => {
 		result.push({ tabIndent: 3, content: "}" + (rIndex < ranges.length - 1 ? "," : "") });
 	});
 
-	const { header, footer } = buildTemplate();
+	const { header, footer } = buildTemplate(template);
 	return [...header, ...result, ...footer];
 });
 </script>
