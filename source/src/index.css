@@ -106,21 +106,6 @@
 		@apply opacity-100;
 	}
 
-	.code-editor {
-		@apply relative bg-gray-900 border border-black rounded-lg;
-	}
-
-	.code-editor-content {
-		@apply whitespace-nowrap w-fit text-gray-300 text-[0.9em];
-	}
-
-	.code-editor-content .red { @apply text-red-400; }
-	.code-editor-content .blue { @apply text-blue-400/80; }
-	.code-editor-content .yellow { @apply text-yellow-500/90; }
-	.code-editor-content .green { @apply text-green-400/80; }
-	.code-editor-content .purple { @apply text-violet-400; }
-	.code-editor-content .comment { @apply text-gray-500; }
-
 	footer .social-link {
 		@apply text-xl md:text-2xl text-gray-100 mx-4 md:mx-2 transition-colors duration-200 ease-in-out hover:text-indigo-600;
 	}
