@@ -16,13 +16,4 @@ const buildTemplate = template => {
 	return { header, footer };
 };
 
-const buildContent = (key, val, useComma = true) => {
-	if(typeof key == "number")
-		key = `<span class="green">'${ key }'</span>`;
-	val = `<span class="green">'${ val }'</span>`;
-	const comma = useComma ? "," : "";
-
-	return  key + ": " + val + comma;
-};
-
-export { buildTemplate, buildContent };
+export { buildTemplate };
