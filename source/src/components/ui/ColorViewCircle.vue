@@ -20,7 +20,7 @@ const labelClass = () => {
 		"mt-2": !hasLabel() || !Boolean(props.labelPosition) || props.labelPosition == "bottom",
 		"mb-2": Boolean(props.labelPosition) && props.labelPosition == "top",
 		"mr-2": Boolean(props.labelPosition) && props.labelPosition == "left",
-		"mr-l": Boolean(props.labelPosition) && props.labelPosition == "right"
+		"ml-2": Boolean(props.labelPosition) && props.labelPosition == "right"
 	};
 
 	if(!Boolean(props.labelClassList))
