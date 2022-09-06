@@ -2,24 +2,33 @@
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import SyntaxViewer from "./ui/SyntaxViewer.vue";
-import { buildTemplate, buildContent } from "@/modules/syntaxViewerTemplating";
+import { buildTemplate } from "@/modules/syntaxViewerTemplating";
 
 const store = useStore();
 
 const template = `
-<span class="comment">// tailwind.config.js</span>
-<span class="red">module</span>.exports = {
-\tcontent: [<span class="green">'./src/**/*.{html,js}'</span>],
+<comment>// tailwind.config.js</comment>
+<red>module</red>.exports = {
+\tcontent: [<green>'./src/**/*.{html,js}'</green>],
 \ttheme: {
 \t\tcolors: {
-\t\t\ttransparent: <span class="green">'transparent'</span>,
-\t\t\tcurrent: <span class="green">'currentColor'</span>,
+\t\t\ttransparent: <green>'transparent'</green>,
+\t\t\tcurrent: <green>'currentColor'</green>,
 <--DIVIDER-->
 \t\t},
 \t\textend: {}
 \t},
 \tplugins: []
 }`;
+
+const buildContent = (key, val, useComma = true) => {
+	if(typeof key == "number")
+		key = `<green>'${ key }'</green>`;
+	val = `<green>'${ val }'</green>`;
+	const comma = useComma ? "," : "";
+
+	return  key + ": " + val + comma;
+};
 
 const syntaxContent = computed(() => {
 	const { black, white, ranges } = store.getters.twResult;
