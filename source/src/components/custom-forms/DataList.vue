@@ -9,6 +9,7 @@ const props = defineProps({ model: Array });
 const emit = defineEmits(["cancel", "change"]);
 const searchConfig = { highlight: true, marker: "<b>{value}</b>" };
 
+const inputField = ref(null);
 const keyword = ref("");
 const showSuggestions = ref(true);
 const suggestingColor = computed(() => keyword.value.search(/([0-9])|(-)/) >= 0);
@@ -66,24 +67,38 @@ const navigatedIndex = {
 	}
 };
 
+const updateBySuggestions = async (index) => {
+	const { name, color } = suggestions.value[index];
+	
+	if(!color){
+		keyword.value = name + "-";
+		navigatedIndex.reset();
+
+		await nextTick();
+		inputField.value.focus();
+		moveCursorToEnd(inputField.value);
+		return;
+	}
+	
+	keyword.value = name;
+	showSuggestions.value = false;
+	emit("change", { name, color });
+};
+
 const navigations = {
 	showSuggestions: () => showSuggestions.value = true,
 	up: () => navigatedIndex.stepDown(),
 	down: () => navigatedIndex.stepUp(),
-	right: () => {
-		keyword.value = suggestions.value[navigatedIndex.ref.value].name + "-";
-		navigatedIndex.reset();
-	},
-	left: () => {
+	right: () => !suggestingColor.value && updateBySuggestions(navigatedIndex.ref.value),
+	left: async () => {
 		keyword.value = suggestions.value[navigatedIndex.ref.value].name.replace(/[0-9]/g, "").replace(/-/g, "");
 		navigatedIndex.reset();
+
+		await nextTick();
+		inputField.value.focus();
+		moveCursorToEnd(inputField.value);
 	},
-	enter: () => {
-		const { name, color } = suggestions.value[navigatedIndex.ref.value];
-		keyword.value = name;
-		showSuggestions.value = false;
-		emit("change", { name, color });
-	}
+	enter: () => suggestingColor.value && updateBySuggestions(navigatedIndex.ref.value)
 };
 
 const getNavigationName = key => {
@@ -101,13 +116,10 @@ const getNavigationName = key => {
 	return navigation.name;
 };
 
-const onFieldKeyDown = async (event) => {
+const onFieldKeyDown = event => {
 	const navName = getNavigationName(event.key);
 	if(navName){
 		navigations[navName]();
-		await nextTick();
-		if(["left", "right", "enter"].indexOf(navName) >= 0)
-			moveCursorToEnd(event.target);
 		event.preventDefault();
 	}
 };
@@ -117,14 +129,22 @@ const onFieldKeyUp = async (event) => {
 	if(!navName)
 		keyword.value = event.target.innerText;
 };
+
+const onFieldBlur = event => {
+	const nextTarget = event.relatedTarget;
+	if(nextTarget && nextTarget.classList.contains("suggestions-item"))
+		return;
+
+	showSuggestions.value = false;
+};
 </script>
 <template>
 	<div>
 		<div class="grid grid-cols-1 mb-4 px-8">
-			<div data-tabindex="0" @keydown="onFieldKeyDown" @keyup="onFieldKeyUp" @focus="showSuggestions = true" @blur="showSuggestions = false" contenteditable="true" class="border rounded-md border-gray-300 px-4 py-1 text-gray-900 focus:border-gray-400 focus:outline-none">{{ keyword }}</div>
+			<div ref="inputField" data-tabindex="0" @keydown="onFieldKeyDown" @keyup="onFieldKeyUp" @focus="showSuggestions = true" @blur="onFieldBlur" contenteditable="true" class="border rounded-md border-gray-300 px-4 py-1 text-gray-900 focus:border-gray-400 focus:outline-none">{{ keyword }}</div>
 		</div>
 		<div class="flex flex-col items-stretch z-[9999]" :class="hideSuggestionsClass">
-			<button v-for="(twColor, index) in suggestions" :class="getSuggestionClass(index)" type="button" class="flex justify-between items-center border-x lg:border-r-0 border-gray-200 px-8 py-1" tabindex="-1">
+			<button v-for="(twColor, index) in suggestions" @click="updateBySuggestions(index)" :class="getSuggestionClass(index)" type="button" class="suggestions-item flex justify-between items-center border-x lg:border-r-0 border-gray-200 px-8 py-1" tabindex="-1">
 				<span v-html="twColor.text" class="text-gray-500 text-sm font-semibold suggestion"></span>
 				<ChevronRightIcon v-if="!suggestingColor" class="w-6 h-6 m-1 text-gray-500" />
 				<ColorViewCircle v-else :color="twColor.color" :circleClassList="['w-8', 'h-8']" />
