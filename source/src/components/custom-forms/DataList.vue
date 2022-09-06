@@ -1,6 +1,7 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, nextTick } from "vue";
 import searchAlgorithm from "@/modules/searchAlgorithm";
+import moveCursorToEnd from "@/modules/moveCursorToEnd";
 import { ChevronRightIcon } from "@heroicons/vue/solid";
 import ColorViewCircle from "../ui/ColorViewCircle.vue";
 
@@ -65,41 +66,62 @@ const navigatedIndex = {
 	}
 };
 
-const navigate = event => {
-	if(!showSuggestions.value){
-		showSuggestions.value = true;
-		return;
-	}
-	if(event.key == "ArrowUp")
-		return navigatedIndex.stepDown();
-	if(event.key == "ArrowDown")
-		return navigatedIndex.stepUp();
-	if(event.key == "ArrowRight" && navigatedIndex.onSuggestions() && !suggestingColor.value){
+const navigations = {
+	showSuggestions: () => showSuggestions.value = true,
+	up: () => navigatedIndex.stepDown(),
+	down: () => navigatedIndex.stepUp(),
+	right: () => {
 		keyword.value = suggestions.value[navigatedIndex.ref.value].name + "-";
-		return navigatedIndex.reset();
-	}
-	if(event.key == "ArrowLeft" && navigatedIndex.onSuggestions() && suggestingColor.value){
+		navigatedIndex.reset();
+	},
+	left: () => {
 		keyword.value = suggestions.value[navigatedIndex.ref.value].name.replace(/[0-9]/g, "").replace(/-/g, "");
-		event.preventDefault();
-		return navigatedIndex.reset();
-	}
-	if(event.key == "Enter" && navigatedIndex.onSuggestions() && suggestingColor.value){
+		navigatedIndex.reset();
+	},
+	enter: () => {
 		const { name, color } = suggestions.value[navigatedIndex.ref.value];
 		keyword.value = name;
 		showSuggestions.value = false;
-		return emit("change", { name, color });
+		emit("change", { name, color });
 	}
 };
 
-const onInputSearchFocus = event => {
-	showSuggestions.value = true;
-	setTimeout(() => event.target.removeAttribute("readonly"), 500);
+const getNavigationName = key => {
+	const navigation = [
+		{ name: "showSuggestions", check: !showSuggestions.value },
+		{ name: "up", checker: key == "ArrowUp" },
+		{ name: "down", checker: key == "ArrowDown" },
+		{ name: "right", checker: key == "ArrowRight" && navigatedIndex.onSuggestions() && !suggestingColor.value },
+		{ name: "left", checker: event.key == "ArrowLeft" && navigatedIndex.onSuggestions() && suggestingColor.value },
+		{ name: "enter", checker: key == "Enter" && navigatedIndex.onSuggestions() && suggestingColor.value }
+	].find(nav => nav.checker === true);
+
+	if(!navigation)
+		return;
+	return navigation.name;
+};
+
+const onFieldKeyDown = async (event) => {
+	const navName = getNavigationName(event.key);
+	if(navName){
+		navigations[navName]();
+		await nextTick();
+		if(["left", "right", "enter"].indexOf(navName) >= 0)
+			moveCursorToEnd(event.target);
+		event.preventDefault();
+	}
+};
+
+const onFieldKeyUp = async (event) => {
+	const navName = getNavigationName(event.key);
+	if(!navName)
+		keyword.value = event.target.innerText;
 };
 </script>
 <template>
 	<div>
 		<div class="grid grid-cols-1 mb-4 px-8">
-			<input v-model="keyword" data-tabindex="0" @keydown="navigate" @focus="onInputSearchFocus" @blur="showSuggestions = false" type="text" class="border rounded-md border-gray-300 px-4 py-1 text-gray-900 focus:border-gray-400 focus:outline-none" placeholder="Search Tailwind's color" autocomplete="new-password" readonly>
+			<div data-tabindex="0" @keydown="onFieldKeyDown" @keyup="onFieldKeyUp" @focus="showSuggestions = true" @blur="showSuggestions = false" contenteditable="true" class="border rounded-md border-gray-300 px-4 py-1 text-gray-900 focus:border-gray-400 focus:outline-none">{{ keyword }}</div>
 		</div>
 		<div class="flex flex-col items-stretch z-[9999]" :class="hideSuggestionsClass">
 			<button v-for="(twColor, index) in suggestions" :class="getSuggestionClass(index)" type="button" class="flex justify-between items-center border-x lg:border-r-0 border-gray-200 px-8 py-1" tabindex="-1">
