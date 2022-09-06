@@ -5,7 +5,6 @@ import tailwindPaletteList from "@/data/tailwindPalette.js";
 import customTabIndex from "@/modules/customTabIndex";
 
 import FixedModal from "./ui/FixedModal.vue";
-import ColorViewCircle from "./ui/ColorViewCircle.vue";
 import DataList from "./custom-forms/DataList.vue";
 import InputTypeColor from "./custom-forms/InputTypeColor/index.vue";
 
@@ -30,7 +29,6 @@ const setActiveTabs = tabsName => {
 };
 
 const value = computed(() => store.getters["colorPicker/hex"]);
-const valueText = computed(() => selectedTwName.value ? selectedTwName.value : store.getters["colorPicker/hex"]);
 
 onBeforeMount(() => {
 	const defaultHexColor = props.defaultValue ? props.defaultValue : "#ff0000";
@@ -64,23 +62,15 @@ onMounted(() => {
 <template>
 	<FixedModal @close="$emit('cancel')">
 		<div ref="customTabIndexRef" @keydown.esc="$emit('cancel')">
-			<div class="grid grid-cols-2 px-8 mb-6 lg:mb-12 lg:mx-auto lg:w-[36rem]">
+			<div class="grid grid-cols-2 px-8 mb-6 lg:mb-12">
 				<button @click="setActiveTabs('twPalette')" type="button" class="px-4 py-2 border border-indigo-600 rounded-l-md shadow-sm text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis hover:bg-indigo-700 hover:border-indigo-700 hover:text-white focus-shadow-default" :class="{ 'bg-indigo-600 text-white': getActiveTabs() == 'twPalette', 'bg-gray-100 text-indigo-600': getActiveTabs() == 'customColor' }" data-tabindex="2">Tailwind Palette</button>
 				<button @click="setActiveTabs('customColor')" type="button" class="px-4 py-2 border border-indigo-600 rounded-r-md shadow-sm text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis hover:bg-indigo-700 hover:border-indigo-700 hover:text-white focus-shadow-default" :class="{ 'bg-indigo-600 text-white': getActiveTabs() == 'customColor', 'bg-gray-100 text-indigo-600': getActiveTabs() == 'twPalette' }" data-tabindex="3">Custom Color</button>
 			</div>
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-0">
-				<div class="lg:border-r lg:border-r-gray-200">
-					<DataList v-if="getActiveTabs() == 'twPalette'" :model="tailwindPaletteList" @change="chooseTailwindColor" />
-					<InputTypeColor v-else class="mb-4 px-8" :defaultValue="value" @change="chooseCustomColor" />
-				</div>
-				<div class="flex flex-col justify-stretch lg:pl-8">
-					<div v-if="value.length > 0 && getActiveTabs() == 'twPalette'" class="flex mb-8 pl-16 pr-16 lg:pl-0 lg:flex-col lg:items-end">
-						<span class="font-semibold text-gray-600 mt-8 lg:mt-4">Color Value : </span>
-						<ColorViewCircle :color="value" :label="valueText" :circleClassList="['w-16', 'h-16']" :labelClassList="['text-gray-500', 'font-semibold', 'text-sm']" />
-					</div>
-					<div class="flex justify-end pl-8 pr-8 mt-auto lg:pr-16">
-						<button @click="submit" :disabled="value.length < 1" type="button" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus-ring-default focus:ring-indigo-600" data-tabindex="1">Submit</button>
-					</div>
+			<div>
+				<DataList v-if="getActiveTabs() == 'twPalette'" :model="tailwindPaletteList" @change="chooseTailwindColor" class="mb-8" />
+				<InputTypeColor v-else class="mb-4 px-8" :defaultValue="value" @change="chooseCustomColor" />
+				<div class="flex justify-end px-8">
+					<button @click="submit" :disabled="value.length < 1" type="button" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus-ring-default focus:ring-indigo-600" data-tabindex="1">Submit</button>
 				</div>
 			</div>
 		</div>
