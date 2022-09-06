@@ -7,7 +7,7 @@
 		@apply scroll-smooth;
 	}
 	button[disabled] {
-		@apply opacity-80 cursor-not-allowed;
+		@apply opacity-80 cursor-default;
 	}
 }
 
@@ -62,7 +62,7 @@
 	}
 
 	.color-panel.disabled, .color-panel.disabled * {
-		@apply cursor-not-allowed;
+		@apply cursor-default;
 	}
 
 	.btn-hovered-shadow:not([disabled]) {
