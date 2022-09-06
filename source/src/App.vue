@@ -9,9 +9,9 @@ store.dispatch("paletteSuggestions/fetch");
 store.commit("setupColors");
 </script>
 <template>
-<div class="bg-gray-100 min-h-screen">
+<div class="bg-gray-100 min-h-screen flex flex-col items-stretch">
 	<Navigation />
-	<router-view />
+	<router-view class="grow" />
 	<Footer class="bg-gray-900" />
 </div>
 <LoadAnimation />
