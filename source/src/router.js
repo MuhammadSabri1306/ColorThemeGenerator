@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-const useBuildPath = false;
+const useBuildPath = true;
 const routes = {
     home: {
         path: "/",
