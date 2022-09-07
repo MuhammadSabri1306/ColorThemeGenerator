@@ -33,7 +33,7 @@ onMounted(() => {
 					<router-link to="/generate/editor" class="px-8 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">New Theme</router-link>
 				</div>
 			</div>
-			<div class="flex justify-center mt-16 lg:mt-32 mb-32 lg:mb-48">
+			<div class="flex justify-center mt-16 lg:mt-32 lg:mb-32">
 				<div class="relative border rounded-md border-gray-300">
 					<a href="https://github.com/MuhammadSabri1306/ColorThemeGenerator" class="inline-flex items-center whitespace-nowrap px-4 py-3 text-xl hover:text-2xl text-gray-800 hover:text-indigo-700 transition-all duration-200 ease-in-out">
 						<IconSocial icon="solid-git-alt" class="ml-auto mr-1" />
