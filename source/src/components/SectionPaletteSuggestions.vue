@@ -61,7 +61,7 @@ const suggestions = computed(() => {
 				<p class="text-center md:text-left md:ml-12 text-gray-700 md:leading-8">By <a href="http://colormind.io" class="font-bold italic text-lg">colormind.io</a></p>
 			</div>
 		</div>
-		<div v-if="suggestions.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 lg:gap-8">
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 lg:gap-8">
 			<router-link v-for="item in suggestions" :to="'/generate/editor/' + item.id" class="inline-flex flex-col items-stretch group bg-white hover:bg-indigo-700 border border-gray-300 hover:border-indigo-700 shadow hover:shadow-lg rounded-xl overflow-hidden transition-all duration-200 ease-in-out">
 				<div class="overflow-hidden w-full h-28 flex cursor-pointer">
 					<div v-for="(color, index) in item.color" :style="{ background: color.hex }" @mouseenter="setShowPaletteHex(item.id, index)" @mouseleave="resetShowPaletteHex(item.id, index)" class="basis-[1px] grow hover:basis-20 overflow-hidden flex transition-all duration-200 ease-in-out">

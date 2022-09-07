@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { onBeforeRouteLeave } from "vue-router";
 
@@ -18,6 +18,8 @@ onMounted(() => {
 	if(store.state.loadAnimation.show)
 		store.commit("loadAnimation/set", false);
 });
+
+const showSuggestions = computed(() => store.state.paletteSuggestions.palette.length >= 0);
 </script>
 <template>
 <main ref="mainElm">
@@ -44,7 +46,7 @@ onMounted(() => {
 				</div>
 			</div>
 		</section>
-		<SectionPaletteSuggestions class="container py-32" />
+		<SectionPaletteSuggestions v-if="showSuggestions" class="container py-32" />
 		<section class="container hidden">
 			<h6 class="text-gray-700 text-center font-medium text-lg md:text-2xl mb-5 md:mb-16 md:px-4 lg:px-8">Build from</h6>
 			<div class="flex justify-center">
