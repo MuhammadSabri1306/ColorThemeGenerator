@@ -5,7 +5,7 @@ import Footer from "./components/Footer.vue";
 import LoadAnimation from "./components/ui/LoadAnimation.vue";
 
 const store = useStore();
-store.dispatch("paletteSuggestions/fetch");
+store.commit("paletteSuggestions/init");
 store.commit("setupColors");
 </script>
 <template>

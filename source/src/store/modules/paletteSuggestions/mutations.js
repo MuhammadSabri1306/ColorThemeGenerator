@@ -1,10 +1,29 @@
+import paletteSuggestions from "@/data/paletteSuggestions";
+import randomArrayNumber from "@/modules/randomArrayNumber";
+import session from "@/modules/session";
+
 export default {
-	push(state, palette){
-		state.palette.push(palette);
+	init(state, palette){
+		const savedSuggestionsJSON = session.get("palettesuggestions");
+		let colorId = [];
+
+		if(savedSuggestionsJSON){
+			const savedSuggestions = JSON.parse(savedSuggestionsJSON);
+			if(Array.isArray(savedSuggestions) && savedSuggestions.length > 0)
+				colorId = savedSuggestions.map(item => item.id);
+		}
+		else
+			colorId = randomArrayNumber(10, 0, 99);
+
+		colorId.forEach(item => {
+			if(paletteSuggestions[item])
+				state.palette.push(paletteSuggestions[item]);
+		});
 
 		if(state.palette.length == 10){
-			const paletteSuggestions = JSON.stringify(state.palette);
-			window.sessionStorage.setItem("colorthemegenerator-palettesuggestions", paletteSuggestions);
+			const pSuggestions = JSON.stringify(state.palette);
+			session.set("palettesuggestions", pSuggestions);
 		}
+
 	}
 };
