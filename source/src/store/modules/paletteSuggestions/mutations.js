@@ -3,7 +3,7 @@ import randomArrayNumber from "@/modules/randomArrayNumber";
 import session from "@/modules/session";
 
 export default {
-	init(state, palette){
+	init(state){
 		const savedSuggestionsJSON = session.get("palettesuggestions");
 		let colorId = [];
 
