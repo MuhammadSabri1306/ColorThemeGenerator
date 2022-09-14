@@ -19,7 +19,8 @@ onMounted(() => {
 		store.commit("loadAnimation/set", false);
 });
 
-const showSuggestions = computed(() => store.state.paletteSuggestions.palette.length >= 0);
+const showSuggestions = computed(() => store.state.paletteSuggestions.palette.length > 0);
+store.commit("paletteSuggestions/init");
 </script>
 <template>
 <main ref="mainElm">
@@ -46,8 +47,8 @@ const showSuggestions = computed(() => store.state.paletteSuggestions.palette.le
 				</div>
 			</div>
 		</section>
-		<SectionPaletteSuggestions v-if="showSuggestions" class="container py-32" />
-		<section class="container hidden">
+		<SectionPaletteSuggestions v-if="showSuggestions" class="container pt-32" />
+		<section class="container hidden py-32">
 			<h6 class="text-gray-700 text-center font-medium text-lg md:text-2xl mb-5 md:mb-16 md:px-4 lg:px-8">Build from</h6>
 			<div class="flex justify-center">
 				<a href="https://vuejs.org/" target="_blank" class="inline-flex flex-col lg:flex-row items-center text-sm font-semibold mx-5 md:mx-8 lg:mx-12 text-gray-700 group transition-colors duration-200 ease-in-out hover:text-gray-800">
