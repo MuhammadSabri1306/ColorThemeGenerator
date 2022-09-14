@@ -2,7 +2,7 @@ const isNumb = val => typeof val == "number";
 
 const randomArrayNumber = (length, start = 0, end = 0) => {
 	const result = [];
-	if(length < (end - start) || !isNumb(length) || !isNumb(start) || !isNumb(end))
+	if(length > (end - start) || !isNumb(length) || !isNumb(start) || !isNumb(end))
 		return result;
 
 	if(length === (end - start)){
