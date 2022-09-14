@@ -12,7 +12,7 @@ store.commit("setupColors");
 <div class="bg-gray-100 min-h-screen flex flex-col items-stretch">
 	<Navigation />
 	<router-view class="grow" />
-	<Footer class="bg-gray-900" />
+	<Footer class="bg-gray-900 mt-32" />
 </div>
 <LoadAnimation />
 </template>
