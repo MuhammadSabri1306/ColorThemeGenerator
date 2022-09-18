@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 
 const props = defineProps({
 	hue: Number,
@@ -12,6 +12,16 @@ const hue = computed(() => props.hue);
 const pickerLeft = ref(props.left);
 const pickerTop = ref(props.top);
 const isPickerDrag = ref(false);
+
+const pickerWatchers = {
+	source: () => ({ left: props.left, top: props.top }),
+	callback: ({ left, top }) => {
+		pickerLeft.value = left;
+		pickerTop.value = top;
+	}
+};
+
+watch(pickerWatchers.source, pickerWatchers.callback);
 
 const colorBoxElm = ref(null);
 const colorBox = computed(() => {
