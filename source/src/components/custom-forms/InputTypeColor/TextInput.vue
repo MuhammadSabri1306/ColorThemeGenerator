@@ -1,31 +1,46 @@
 <script setup>
-import { ref, reactive, watch, computed, onBeforeMount } from "vue";
+import { ref, reactive, watch, computed } from "vue";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/vue/solid";
+
+const roundHsv = ({ h, s, v }) => ({ h: Math.round(h), s: Math.round(s), v: Math.round(v) });
 
 const props = defineProps({
 	hex: String,
-	rgb: Object
+	rgb: Object,
+	hsv: Object
 });
 const emit = defineEmits(["change"]);
-const color = reactive({ hex: "", rgb: {} });
+const color = reactive({
+	hex: props.hex,
+	rgb: props.rgb,
+	hsv: roundHsv(props.hsv)
+});
 
-watch(() => props.hex, hex => color.hex = hex);
-watch(() => props.rgb, rgb => color.rgb = rgb);
-
-onBeforeMount(() => {
-	color.hex = props.hex;
-	color.rgb = props.rgb;
-})
-
-const type = ["hex", "rgb"];
-const typeIndex = ref(0);
-const getType = () => {
-	const type = ["hex", "rgb"];
-	return type[typeIndex.value] ? type[typeIndex.value] : type[0];
+const textInputWatchers = {
+	hex: {
+		source: () => props.hex,
+		callback: hex => color.hex = hex
+	},
+	rgb: {
+		source: () => props.rgb,
+		callback: rgb => color.rgb = rgb
+	},
+	hsv: {
+		source: () => props.hsv,
+		callback: hsv => color.hsv = roundHsv(hsv)
+	}
 };
+
+for(const key in textInputWatchers){
+	watch(textInputWatchers[key].source, textInputWatchers[key].callback);
+}
+
+const type = ["hex", "rgb", "hsv"];
+const typeIndex = ref(0);
+const getType = () => type[typeIndex.value] ? type[typeIndex.value] : type[0];
 const changeType = () => typeIndex.value += (typeIndex.value == type.length - 1) ? -(typeIndex.value) : 1;
 
-const hexChange = e => {
+const onHexChange = e => {
 	let hex = e.target.value;
 
 	if(hex[0] != "#")
@@ -41,33 +56,63 @@ const hexChange = e => {
 	emit("change", { hex });
 };
 
-const changeRGB = ({ r, g, b }) => {
-	const rgb = {
-		r: r ? r.replace(/\D/g, "") : color.rgb.r,
-		g: g ? g.replace(/\D/g, "") : color.rgb.g,
-		b: b ? b.replace(/\D/g, "") : color.rgb.b
-	};
+const formatNumberInput = val => val.replace(/\D/g, "");
 
-	emit("change", { rgb });
+const onRgbChange = {
+	submit: ({ r, g, b }) => {
+		const rgb = {
+			r: r ? formatNumberInput(r) : color.rgb.r,
+			g: g ? formatNumberInput(g) : color.rgb.g,
+			b: b ? formatNumberInput(b) : color.rgb.b
+		};
+
+		emit("change", { rgb });
+	},
+	r: e => onRgbChange.submit({ r: e.target.value }),
+	g: e => onRgbChange.submit({ g: e.target.value }),
+	b: e => onRgbChange.submit({ b: e.target.value })
 };
-const rgbRChange = e => changeRGB({ r: e.target.value });
-const rgbGChange = e => changeRGB({ g: e.target.value });
-const rgbBChange = e => changeRGB({ b: e.target.value });
+
+const onHsvChange = {
+	submit: ({ h, s, v }) => {
+		const hsv = {
+			h: h ? formatNumberInput(h) : color.hsv.h,
+			s: s ? formatNumberInput(s) : color.hsv.s,
+			v: v ? formatNumberInput(v) : color.hsv.v
+		};
+
+		emit("change", { hsv });
+	},
+	h: e => onHsvChange.submit({ h: e.target.value }),
+	s: e => onHsvChange.submit({ s: e.target.value }),
+	v: e => onHsvChange.submit({ v: e.target.value })
+};
 </script>
 <template>
 	<div class="flex items-center">
 		<div v-if="getType() == 'hex'" class="grow grid labelled-input-wrapper after:content-['HEX']">
-			<input :value="color.hex" data-tabindex="0" @change="hexChange" @keyup.enter="hexChange" type="text" class="input-color-text" autocomplete="off">
+			<input :value="color.hex" data-tabindex="0" @change="onHexChange" @keyup.enter="onHexChange" type="text" class="input-color-text" autocomplete="off">
 		</div>
-		<div v-if="getType() == 'rgb'" class="grow grid grid-cols-3 gap-1 md:gap-4">
+		<div v-else-if="getType() == 'rgb'" class="grow grid grid-cols-3 gap-1 md:gap-4">
 			<div class="labelled-input-wrapper after:content-['R']">
-				<input :value="color.rgb.r" data-tabindex="0" @change="rgbRChange" @keyup.enter="rgbRChange" type="text" class="input-color-text" autocomplete="off">
+				<input :value="color.rgb.r" data-tabindex="0" @change="onRgbChange.r" @keyup.enter="onRgbChange.r" type="text" class="input-color-text" autocomplete="off">
 			</div>
 			<div class="labelled-input-wrapper after:content-['G']">
-				<input :value="color.rgb.g" data-tabindex="0" @change="rgbGChange" @keyup.enter="rgbGChange" type="text" class="input-color-text" autocomplete="off">
+				<input :value="color.rgb.g" data-tabindex="0" @change="onRgbChange.g" @keyup.enter="onRgbChange.g" type="text" class="input-color-text" autocomplete="off">
 			</div>
 			<div class="labelled-input-wrapper after:content-['B']">
-				<input :value="color.rgb.b" data-tabindex="0" @change="rgbBChange" @keyup.enter="rgbBChange" type="text" class="input-color-text" autocomplete="off">
+				<input :value="color.rgb.b" data-tabindex="0" @change="onRgbChange.b" @keyup.enter="onRgbChange.b" type="text" class="input-color-text" autocomplete="off">
+			</div>
+		</div>
+		<div v-else-if="getType() == 'hsv'" class="grow grid grid-cols-3 gap-1 md:gap-4">
+			<div class="labelled-input-wrapper after:content-['H']">
+				<input :value="color.hsv.h" data-tabindex="0" @change="onHsvChange.h" @keyup.enter="onHsvChange.h" type="text" class="input-color-text" autocomplete="off">
+			</div>
+			<div class="labelled-input-wrapper after:content-['S']">
+				<input :value="color.hsv.s" data-tabindex="0" @change="onHsvChange.s" @keyup.enter="onHsvChange.s" type="text" class="input-color-text" autocomplete="off">
+			</div>
+			<div class="labelled-input-wrapper after:content-['V']">
+				<input :value="color.hsv.v" data-tabindex="0" @change="onHsvChange.v" @keyup.enter="onHsvChange.v" type="text" class="input-color-text" autocomplete="off">
 			</div>
 		</div>
 		<button @click="changeType" data-tabindex="0" type="button" class="flex flex-col justify-center items-center ml-4 md:px-4 py-2 text-gray-500 hover:text-gray-700 focus-color-default">

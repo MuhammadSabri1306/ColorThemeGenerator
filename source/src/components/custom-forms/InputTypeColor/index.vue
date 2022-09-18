@@ -30,11 +30,13 @@ const onHueSliderChange = hue => {
 	emit("change", color.value.toHexString());
 };
 
-const onTextInputChange = ({ hex, rgb }) => {
+const onTextInputChange = ({ hex, rgb, hsv }) => {
 	if(hex)
 		color.value = new W3Color("hex", [hex]);
 	else if(rgb)
 		color.value = new W3Color("rgb", [rgb.r, rgb.g, rgb.b]);
+	else if(hsv)
+		color.value = new W3Color("hsv", [hsv.h, hsv.s, hsv.v]);
 
 	emit("change", color.value.toHexString());
 };
@@ -71,7 +73,7 @@ input[type="range"]::-moz-range-thumb {
 			<div class="aspect-square border border-gray-300 rounded-full shadow-sm mr-4" :style="{ background: colorHex }"></div>
 			<div class="mt-2">
 				<HueSlider :hue="colorHsv.h" class="mb-4" @change="onHueSliderChange" />
-				<TextInput :hex="colorHex" :rgb="colorRgb" @change="onTextInputChange" />
+				<TextInput :hex="colorHex" :rgb="colorRgb" :hsv="colorHsv" @change="onTextInputChange" />
 			</div>
 		</div>
 	</div>
